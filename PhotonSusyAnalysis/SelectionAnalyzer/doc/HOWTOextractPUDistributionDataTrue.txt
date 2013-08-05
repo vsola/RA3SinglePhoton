@@ -1,0 +1,111 @@
+https://twiki.cern.ch/twiki/bin/view/CMS/PileupJSONFileforData#Modifying_Pileup_JSON_for_Use_wi
+
+Modifying Pileup JSON for Use with Different HLT Paths
+
+It is now possible (27 Feb, 2012) to modify the pileup JSON file in a simple manner to take into 
+account the effects of various prescales on your chosen HLT paths. This is a two-step process.
+
+    First, calculate the delivered and recorded luminosity for each lumi section in your JSON file 
+for the given trigger paths you are using. This should be done using pixelLumiCalc:
+
+     pixelLumiCalc.py lumibyls -i InputJSONFile --hltpath "YourHLTPath" -o YourOutput.csv 
+
+    This command will create a .csv file with one entry for each LumiSection for each trigger. 
+In order to make the JSON file, the output of this process should be a single .csv file with one 
+entry per LumiSection. If you have mutliple triggers or are using an OR of triggers or whatever, 
+you have to figure out what the integrated luminosity is for each LumiSection, since that has to 
+be a unique value. Once you make the .csv file with that information, you can make the JSON file.
+    Second, use the script from the latest version of RecoLuminosity/LumiDB called pileupReCalc_HLTpaths.py. 
+This script takes the correct recorded luminosity from the file calculated above and places this 
+value in the pileup JSON. This will change the weight of each LumiSection in the pileup distribution 
+where the recorded luminosity is smaller than nominal due to trigger prescales. The syntax is as follows:
+
+     pileupReCalc_HLTpaths.py -i YourOutput.csv --inputLumiJSON pileup_2011_JSON_pixelLumi.txt -o My_HLT_corrected_PileupJSON.txt
+
+Notes: use the head version of RecoLuminosity/LumiDB.
+
+Then, you can use the newly-created My_HLT_corrected_PileupJSON.txt as your new input JSON file 
+for the pileup calculation described in the next section.
+
+Calculating Your Pileup Distribution
+
+For the user, the important issue is how to access this information. All that is required is a file 
+in standard JSON format listing the LumiSections included in a user's analysis. Then, a script called 
+pileupCalc.py in RecoLuminosity/LumiDB can be used to create the histogram of the pileup distribution 
+corresponding exactly to the LumiSections used in the analysis. This is the input needed for the pileup 
+reweighting tools. These scripts are available in tags V03-03-16 and later of RecoLuminosity/LumiDB.
+
+A sample calculation looks like this:
+
+pileupCalc.py -i MyAnalysisJSON.txt --inputLumiJSON pileup_JSON_2011_4_2_validation.txt --calcMode observed --minBiasXsec 69400 --maxPileupBin 50 --numPileupBins 50  MyDataPileupHistogram.root
+
+There are a number of important arguments and options on display here. (All of the arguments can be seen by typing pileupCalc.py --help.)
+
+    The only required option is "--calcMode" which tells the script which distribution you are making. 
+The two choices are "true" and "observed". Some have found this nomenclature confusing, so here is 
+another attempt at an explanation. Given a total inelastic cross section, the average bunch instantaneous 
+luminosity can be directly converted into the expected number of interactions per crossing for this 
+LumiSection. Selecting the "true" mode puts this value, and only this value, into the pileup histogram. 
+Hence, in this case the pileup histogram contains the distribution of the mean number of interactions per 
+crossing, which would correspond exactly to the value returned by PileupSummaryInfo::getTrueNumInteractions() 
+in the Monte Carlo. Since this is the mean value of the poisson distribution from which the number of 
+interactions in- and out-of-time are generated, no additional information should be required for reweighting 
+if these values are matched in data and Monte Carlo. On the other hand, selecting the "observed" mode causes 
+the script to enter in the histogram a properly-normalized poisson distribution with a mean corresponding to 
+the expected number of interactions per crossing for each LumiSection. Given an expected mean number of 
+interactions, the pileup histogram contains the distribution of the number of interactions one would actually 
+observe given a poisson of that mean. So, this distribution is what one would see if one counted the number 
+of events seen in a given beam crossing (by looking at the number of vertices in data, for example), or using 
+something like PileupSummaryInfo::getPU_NumInteractions() in the Monte Carlo. This would be appropriate for 
+pileup reweighting based on in-time-only distributions. Plots of these distributions are shown later in this page. 
+
+    The total inelastic cross section is an input argument; the default is set to 73500 ub, but it can and 
+should be modified by the "--minBiasXsec" option to set it to the approved value of 68000 (for 2011) or 69300 
+(for 2012). (This default will be set to 69400 in an upcoming version.) Note that this command option makes 
+shifting the target distribution for reweighting as simple as regenerating another histogram with a different 
+cross section; all issues with shifting poisson distributions and the like are automatically done correctly. 
+This should make computation of systematic errors much simpler. [NOTE: Studies on Z->mu mu events in 2012 have 
+shown that an inelastic cross section value of something like 73.5 mb gives better Data/MC agreement when one 
+compares the number of reconstructed vertices. This does not match the value one might obtain by extrapolating 
+the 68 mb cross section from 7 TeV to 8 TeV, which is 69.4 mb. This difference should be counted as a systematic 
+error on the pileup distribution and be added to the other systematic errors. ] 
+
+    The user also has complete control over the binning of the output histogram. For the "true" mode, some users 
+have found that having many bins improves the 3D pileup reweighting technique, so this can be varied. For the 
+"observed" mode, since the number of interactions is an integer, it makes sense to have the same number of bins 
+as there are interactions, hence the 50 and 50 in the example above. Smaller bins are allowed in this mode and 
+are properly calculated, however. 
+
+On a more technical note, the rms of the bunch-to-bunch luminosities is used to generate tails on the distributions. 
+The above description is almost correct, except that each LumiSection is actually represented by a gaussian centered 
+on the mean number of interactions, and having a width corresponding to the rms of the bunch-by-bunch luminosities, 
+even in "true" calculation mode. This is necessary because the distribution in data sees all of the colliding bunches, 
+not just the average. The gaussian is properly convoluted with the poisson distribution for the "observed" calculation 
+mode. Two sets of comparison plots are included here. In the first set, the expected mean number of interactions is 
+calculated for every bunch-by-bunch collision in each LumiSection and is weighted by the integrated luminosity for 
+each bunch pair in each LumiSection (black histogram). This is compared to (in red) the distribution of the expected 
+number of interactions in the pileup JSON calculation using "true" mode. The seven run ranges were chosen more or less 
+randomly based on their size in the DCSONLY JSON file. The eighth panel shows the number of interactions on a 
+logarithmic scale, including the high-pileup runs at the end of 2011. The agreement is quite good. The second set of 
+plots shows a comparison of the calculated "observed" distributions in each case, where, in black, the poisson 
+distribution is calculated for each bunch crossing individually. This corresponds to the old estimatePileup function, 
+and is one of the reasons it takes forever to run. The red histogram is the same calculation, but done once per 
+LumiSection using the pileup JSON file. The small differences in the "true" case are smeared out here by the additional 
+poisson distributions, resulting in even better agreement. 
+
+
+MY COMMANDS: 
+
+lumiCalc2.py lumibyls -i PhotonSusyAnalysis/Cert_190456-201229_8TeV_PromptReco_Collisions12_JSON.txt --hltpath "HLT_Photon70_CaloIdXL_PF*HT400_v*" -o YourOutput.csv
+
+addpkg RecoLuminosity/LumiDB V03-05-07
+
+pileupReCalc_HLTpaths.py -i YourOutput.csv --inputLumiJSON PhotonSusyAnalysis/pileup_JSON_DCSONLY_190389-201678_corr.txt -o My_HLT_corrected_PileupJSON.txt
+
+RecoLuminosity/LumiDB/scripts/pileupCalc.py -i PhotonSusyAnalysis/Cert_190456-201229_8TeV_PromptReco_Collisions12_JSON.txt --inputLumiJSON My_HLT_corrected_PileupJSON.txt --calcMode true --minBiasXsec 69400 --maxPileupBin 50 --numPileupBins 50  MyDataPileupHistogram.root
+
+root -l MyDataPileupHistogram.root
+
+TH1F * histo = (TH1F*)_file0->FindObjectAny("pileup")
+histo->Scale(1 / histo->Integral());
+for(int i=0;i<histo->GetNbinsX()+1;++i){cout<<""<<histo->GetBinContent(i)<<","<<endl;}

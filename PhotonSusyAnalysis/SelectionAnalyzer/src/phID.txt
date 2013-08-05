@@ -1,0 +1,69 @@
+#Photon	
+
+cutForPhotonIdTight = '!hasPixelSeed() &&     //userInt("isPromptElectronSafe")==1
+		       r9() < 1.0 && 
+		       sigmaIetaIeta() > 0.001 && 
+		       userFloat("sigmaIphiIphi") > 0.001 && 
+		       sigmaIetaIeta() < 0.012 && 
+		       hadTowOverEm()  < 0.05  && 
+		       userFloat("chargedIsoCor") <  2.6 && 
+		       userFloat("neutralIsoCor") < (3.5 + 0.04*pt) && 
+		       userFloat("photonIsoCor")  < (1.3 + 0.005*pt)'
+
+cutForPhotonIdTight = '!hasPixelSeed() && 
+		       r9() < 1.0 &&
+		       ( ( ecalRecHitSumEtConeDR03() - 0.081*userFloat("rhoPU") ) 
+		       + ( hcalTowerSumEtConeDR03()  - 0.022*userFloat("rhoPU") ) 
+		       + ( trkSumPtSolidConeDR03()   - 0.011*userFloat("rhoPU") ) ) < 6 && 
+		       sigmaIetaIeta()  < 0.011 && 
+		       hadronicOverEm() < 0.05  && 
+		       sigmaIetaIeta()  > 0.001'
+
+
+# Photon_ele
+
+cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed() &&     //userInt("isPromptElectronSafe")==0
+			              r9() < 1.0 && 
+				      sigmaIetaIeta() > 0.001 && 
+				      userFloat("sigmaIphiIphi") > 0.001 && 
+				      sigmaIetaIeta() < 0.012 && 
+				      hadTowOverEm()  < 0.05 && 
+				      userFloat("chargedIsoCor") <  2.6 && 
+				      userFloat("neutralIsoCor") < (3.5 + 0.04*pt) && 
+				      userFloat("photonIsoCor")  < (1.3 + 0.005*pt)'
+
+cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed() &&
+				      r9() < 1.0 &&
+				      ( ( ecalRecHitSumEtConeDR03() - 0.081*userFloat("rhoPU") ) 
+				      + ( hcalTowerSumEtConeDR03()  - 0.022*userFloat("rhoPU") ) 
+				      + ( trkSumPtSolidConeDR03()   - 0.011*userFloat("rhoPU") ) ) < 6 && 
+				      sigmaIetaIeta()  < 0.011 && 
+				      hadronicOverEm() < 0.05  && 
+				      sigmaIetaIeta()  > 0.001'
+
+	
+# Photon_jet
+
+	
+cutForFODenominator = '!hasPixelSeed() && 
+		       r9() < 1.0 && 
+		       sigmaIetaIeta() > 0.001 && 
+		       userFloat("sigmaIphiIphi") > 0.001 && 
+		       sigmaIetaIeta() < 0.015 && 
+		       hadTowOverEm()  < 0.05  && 
+		       userFloat("chargedIsoCor") <  15.0 && 
+		       userFloat("neutralIsoCor") < ( 3.5+0.04*pt)  && 
+		       userFloat("photonIsoCor")  < ( 1.3+0.005*pt) && 
+		       ( sigmaIetaIeta()>0.012 || userFloat("chargedIsoCor") > 2.6 )'
+
+cutForFODenominator = '!hasPixelSeed()&&r9() < 1.0 &&
+		       ( ( ecalRecHitSumEtConeDR03() - 0.081*userFloat("rhoPU") ) 
+		       + ( hcalTowerSumEtConeDR03()  - 0.022*userFloat("rhoPU") ) 
+		       + (trkSumPtSolidConeDR03()    - 0.011*userFloat("rhoPU") ) ) < min(30,0.3*pt) && 
+		       ( ( ( ecalRecHitSumEtConeDR03() - 0.081*userFloat("rhoPU") ) 
+		         + ( hcalTowerSumEtConeDR03()  - 0.022*userFloat("rhoPU") ) 
+			 + ( trkSumPtSolidConeDR03()   - 0.011*userFloat("rhoPU") ) ) > 6 || 
+			 sigmaIetaIeta() >= 0.011 ) && 
+		       sigmaIetaIeta()  <= 0.014 && 
+		       hadronicOverEm() <  0.05  && 
+		       sigmaIetaIeta()  >  0.001'

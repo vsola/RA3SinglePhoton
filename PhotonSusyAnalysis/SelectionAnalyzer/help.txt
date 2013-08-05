@@ -1,0 +1,7 @@
+https://cmssdt.cern.ch/SDT/doxygen/CMSSW_5_3_9/doc/html/d6/d00/classpat_1_1Jet.html
+
+http://cmslxr.fnal.gov/lxr/search?filestring=&string=jetCorrectionLevel
+
+http://cmslxr.fnal.gov/lxr/search?filestring=&string=jet.correctedjet%28%29
+
+http://cmslxr.fnal.gov/lxr/search?filestring=&string=jet%28%29.et%28%29

@@ -1,0 +1,10 @@
+	    hists_[(prefix + "photonPtGen").c_str()]->Fill(photon.genParticleRef()->pt(), weight);
+
+	    hists2D_[(prefix + "photonPtGenVsRec").c_str()]->Fill(photon.genParticleRef()->pt(), pjSelector.correctedphotonpt(), weight);
+
+            hists_[(prefix + "noPhotonsGenMatch").c_str()]->Fill(pjSelector.selectedPhotonsWithGenMatch().size(), weight);
+
+            std::vector < std::pair<double, double> > etRelVecGen = pjSelector.getDeltaRVsEtrelGen();
+            for (int v = 0; v < (int) etRelVecGen.size(); ++v) {
+                hists2D_[(prefix + "deltaRPhotonJetVsEtrelGen").c_str()]->Fill(etRelVecGen[v].first, etRelVecGen[v].second, weight);
+            }
