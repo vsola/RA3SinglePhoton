@@ -1,0 +1,7 @@
+<environment>
+ <use name=root> 
+ <use name=rootgraphics>
+</environment>
+<export> 
+ <lib name=UtilOwnUtil>  
+</export>
