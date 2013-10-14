@@ -6,13 +6,14 @@
 #dirnameTrees=(JetHT/HTTrigger_2012D_22Jan2013_V03)
 #dirnameTrees=(Photon/PhotonTrigger_2012A_22Jan2013_V04)
 #dirnameTrees=(SinglePhoton/PhotonTrigger_2012C_22Jan2013_V03)
-dirnameTrees=(SinglePhotonParked/PhotonTrigger_2012D_22Jan2013_V03)
+#dirnameTrees=(SinglePhotonParked/PhotonTrigger_2012D_22Jan2013_V03)
 #dirnameTrees=(PhotonHad/photonJetSelection_PhotonHadReReco_2012A_22Jan_T03)
+dirnameTrees=(PhotonHad/photonJetSel_2012A_22Jan_V15)
 
 #nameTo="HTTrigger"
 nameTo="PhotonTrigger"
 #nameTo="SEleTrigger"
-versionStr="Run2012D_22Jan13_V04"
+versionStr="Run2012A_22Jan13_V15"
 
 ###################################################################################
 ###################################################################################
@@ -30,8 +31,8 @@ for dirnameTree in ${dirnameTrees[@]};
  for name in `dcls /pnfs/desy.de/cms/tier2/store/user/vsola/$dirnameTree/`;
  #for name in ${namesfound[@]}
  do
-#  if [[  $name == **  ]]
-  if [[  $name == *4aaa704b887c4b65b3698b28a7d1280b*  ]]
+   if [[  $name == **  ]]
+#  if [[  $name == *4aaa704b887c4b65b3698b28a7d1280b*  ]]
 
  
   then 

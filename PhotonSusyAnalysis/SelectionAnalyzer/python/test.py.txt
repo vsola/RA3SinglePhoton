@@ -1,0 +1,130 @@
+	
+	###### Execution Path #################################################
+	# Configure process options
+	process.options = cms.untracked.PSet(
+		wantSummary = cms.untracked.bool(True),
+		SkipEvent = cms.untracked.vstring('ProductNotFound')
+	       ) 
+
+	print("execution path")
+
+
+	if doSkimming is True or doTriggerEffStudy is True:
+		if  sampleConf == 10 : #DATA
+			if doTriggerEffStudy == True:
+				process.selectionSequence = cms.Path(process.oneGoodVertexFilter*process.applyTechnicalPreselectionDataTriggerStudies)
+			else:
+				process.selectionSequence = cms.Path(process.oneGoodVertexFilter*process.applyTechnicalPreselectionData2010)
+		else: #MC
+			process.selectionSequence = cms.Path(process.oneGoodVertexFilter*process.applyTechnicalPreselectionMC)
+		# Analysis on AOD
+		process.selectionSequence *= (process.goodOfflinePrimaryVertices*process.patDefaultSequence+process.patseq)
+		process.selectionSequence *=  process.selectedPhotonsWithRho	
+	
+		process.selectionSequence *= process.pfParticleSelectionSequence+process.phoIsoSequence
+		process.selectionSequence *= process.selectedPhotonsWithRhoAndIsos
+		process.selectionSequence *= process.patConversions
+		process.selectionSequence *= process.kt6PFJetsBarrel*process.pfchsMETcorr
+
+	else: #Analysis on PATTuples
+		process.selectionSequence = cms.Path(process.oneGoodVertexFilter)
+	
+	if isMC == True :
+		process.selectionSequence *= process.weightProducer
+	
+	# Object Selection
+	process.selectionSequence *= process.myjetselection*process.myphotonselection*process.myphotonselectionPixelSeed*process.myphotonselectionFO*process.myphotonselectionLoose
+	process.selectionSequence *= process.myphotonselectionISO*process.myphotonselectionPixelSeedISO*process.myphotonselectionFOISO
+        # Object Cleaning
+	process.selectionSequence *=process.cleanPatJetsIsolatedLeptonsCalo*process.cleanPatJetsIsolatedLeptonsPF
+	# MET Selection
+	process.selectionSequence *=process.makemyLayer1METs*process.makemyLayer1METsPF*process.mylayer1METsRawPF*process.mylayer1METsRaw
+
+	
+	if doAnalysis is True:
+		if isTest is True:
+			process.selectionSequence *= process.myjetselection*process.myphotonselection*process.myphotonselectionFO*process.myphotonselectionLoose
+			if noKinematicPresel == False: #Always
+				process.selectionSequence *= process.myjetselectionFilter*process.myphotonselectionFilter*process.selectionPlotMaker
+		else:
+		    
+			if noKinematicPresel==False: #Always
+				process.selectionSequence *= process.myjetselectionFilter*process.myphotonselectionFilter*process.filter_PreselHT
+		    
+			if sampleConf == 10 : #DATA
+				process.selectionSequence *= process.EcalDeadCellTriggerPrimitiveFilter
+
+			if printTreeViewer is True: 
+				process.selectionSequence *= process.filter_1ph_3jetsGenEleVeto*process.printTree
+
+			process.selectionSequence  *= process.select_All
+		    
+			if quickScanForQCDEstOnly is False: #Always
+			    
+				process.selectionSequence *= process.select_1ph_3jets_PixelSeed*process.select_1ph_3jets_PixelSeedCorr
+				process.selectionSequence *= process.select_1ph_2jets_PixelSeed*process.select_1ph_2jets_PixelSeedCorr
+				process.selectionSequence *= process.select_1ph_3jets_GenEleVetoPixelSeedCorr*process.select_1ph_3jets_GenEleVetoPixelSeed*process.select_1ph_3jets_GenEleVeto
+				process.selectionSequence *= process.select_1ph_3jets_GenEleVetoRePixelSeedCorr*process.select_1ph_3jets_GenEleVetoRePixelSeed*process.select_1ph_3jets_GenEleVetoRe
+				process.selectionSequence *= process.select_1ph_2jets_GenEleVetoPixelSeedCorr*process.select_1ph_2jets_GenEleVetoPixelSeed*process.select_1ph_2jets_GenEleVeto
+				process.selectionSequence *= process.select_1ph_2jets_GenEleVetoRePixelSeedCorr*process.select_1ph_2jets_GenEleVetoRePixelSeed*process.select_1ph_2jets_GenEleVetoRe
+				process.selectionSequence *= process.select_1ph_2jets_1b_PixelSeed*process.select_1ph_2jets_1b_PixelSeedCorr
+				process.selectionSequence *= process.select_1ph_2jets_PixelSeedCorrISO
+
+			
+			process.selectionSequence *= process.select_1ph_3jets
+			process.selectionSequence *= process.select_1ph_2jets
+			process.selectionSequence *= process.select_1ph_2jets_1b
+			
+			process.selectionSequence *= process.select_1ph_3jets_FO
+			process.selectionSequence *= process.select_1ph_2jets_FO
+		    
+			process.selectionSequence *= process.select_1ph_3jets_FO_Corr
+			process.selectionSequence *= process.select_1ph_3jets_FO_CorrMC
+	        
+			process.selectionSequence *= process.select_1ph_2jets_FO_Corr
+			process.selectionSequence *= process.select_1ph_2jets_FO_CorrMC
+
+			process.selectionSequence *= process.select_1ph_2jets_1b_FO_Corr
+			process.selectionSequence *= process.select_1ph_2jets_1b_FO_Corr2
+		    		    		
+			process.selectionSequence *= process.select_1ph_3jets_FO_Corr2*process.select_1ph_2jets_FO_Corr2 
+		        #process.selectionSequence *= process.select_1ph_3jets_FO_Corr2MC*process.select_1ph_2jets_FO_Corr2MC
+			
+			process.selectionSequence *= process.select_1ph_2jetsISO
+			process.selectionSequence *= process.select_1ph_2jets_FOISO
+			process.selectionSequence *= process.select_1ph_2jets_FO_CorrISO
+			process.selectionSequence *= process.select_1ph_2jets_FO_CorrMCISO
+			
+
+	if doTriggerEffStudy is True:
+		process.selectionSequence *= process.myphotonselectionTRIGGEREFF*process.myphotonselectionTRIGGEREFFLowPt
+		
+		process.selectionSequence *= (process.select_All_HT_Denominator+process.select_All_Photon_Denominator)
+		process.selectionSequence *= process.photon2012_HLT_data*(process.select_All_HT_Nominator+process.select_All_Photon_Nominator)
+		
+		
+	
+	print(process.selectionSequence)
+	
+	print("GenJetMatching:")
+	print(process.patJetGenJetMatch.src)
+	print(process.patJetGenJetMatchPFlow.src)
+	print(process.patJetGenJetMatch.matched)
+	print(process.patJetGenJetMatchPFlow.matched)
+	
+	print(process.patJetGenJetMatch.maxDPtRel)
+	
+	print(process.photonMatch.src)
+	print(process.photonMatch.mcPdgId)
+    
+	if doSkimming is False:
+		print("---Analysis only---")
+		process.schedule = cms.Schedule(process.selectionSequence,process.ePat)
+	else:
+		print("---write SKIM---!")
+		process.schedule = cms.Schedule(process.selectionSequence,process.e)
+	
+	if dump is True: #FALSE
+		process.schedule = cms.Schedule(process.selectionSequence,process.p,process.eAll)
+
+        open('dumpConfig.py','w').write(process.dumpPython())

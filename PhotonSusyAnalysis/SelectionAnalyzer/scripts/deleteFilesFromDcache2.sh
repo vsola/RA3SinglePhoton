@@ -2,9 +2,10 @@
 #DBSInvalidateDataset.py  --DBSURL=https://cmsdbsprod.cern.ch:8443/cms_dbs_ph_analysis_02_writer/servlet/DBSServlet --files --datasetPath=
 
 
-#dirnameTrees=(PhotonHad)
-dirnameTrees=(SinglePhoton)
-
+#dirnameTrees=(JetMon)
+#dirnameTrees=(SinglePhoton)
+#dirnameTrees=(SingleElectron)
+dirnameTrees=(PhotonSusyAnalysis)
 
 ini dctools
 

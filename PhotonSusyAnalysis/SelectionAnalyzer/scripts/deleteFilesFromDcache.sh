@@ -5,9 +5,9 @@
 #dirnameTrees=(PhotonHad/photonJetSel_2012A_22Jan_T02)
 #dirnameTrees=(TTJets_MassiveBinDECAY_TuneZ2star_8TeV-madgraph-tauola/photonJetSel_TTJets_MassiveBin_V08)
 #dirnameTrees=(GVJets_Incl_8TeV-madgraph/photonJetSel_GVJets_Incl_V08)
-dirnameTrees=(HT/HTTrigger_2012A_22Jan2013_V01)
+#dirnameTrees=(HT/HTTrigger_2012A_22Jan2013_V01)
 
-#dirnameTrees=(PhotonSusyAnalysis)
+dirnameTrees=(PhotonSusyAnalysis)
 
 
 ini dctools

@@ -317,6 +317,44 @@ void SelectionAnalyzer :: analyze(const edm::EventBase& event) {
             evtCounter350_ += weight;
 
 
+        if ( pjSelector_.isPhotonValid() && 
+	     pjSelector_.isJetValid()    && 
+	     pjSelector_.isJet2Valid()   && 
+	     pjSelector_.isMetValid()    ){
+
+            if ( pjSelector_.selectedPhotons().size() >= 1 &&
+		 pjSelector_.selectedJets().size() == 2    &&
+		 pjSelector_.met().pt() > 100.             &&
+		 pjSelector_.getDeltaPhiMetPhoton1() > 0.5 &&
+		 pjSelector_.getDeltaPhiMetPhoton1() < 2.5 &&
+		 pjSelector_.getDeltaPhiJ1Photon() > 0.5   &&
+		 pjSelector_.getDeltaPhiJ1Photon() < 0.5   &&
+		 pjSelector_.getDeltaPhiMetJet1() > 0.5    &&
+		 pjSelector_.getDeltaPhiMetJet1() < 2.5    &&
+		 pjSelector_.getDeltaPhiMetJet2() > 0.5    &&
+		 pjSelector_.getDeltaPhiMetJet2() < 2.5    &&
+		 pjSelector_.getDeltaPhiJ1J2() > 0.5       &&
+		 pjSelector_.getDeltaPhiJ1J2() < 2.5       ){
+
+	      std::cout << "VS!!!"
+			<< " - lumis: "          << event.eventAuxiliary().luminosityBlock()
+			<< " , run: "            << event.eventAuxiliary().run()
+			<< " , event#: "         << event.eventAuxiliary().event()
+			<< "-> photon Pt: "      << pjSelector_.photon().pt()
+			<< " , corr photon Pt: " << pjSelector_.correctedphotonpt()
+			<< " , photon eta: "     << pjSelector_.photon().eta()
+			<< " , # of jets: "      << pjSelector_.selectedJets().size()
+			<< " , 1st jet Pt: "     << pjSelector_.jet().pt()
+			<< " , 1st jet eta: "    << pjSelector_.jet().eta()
+			<< " , 2nd jet Pt: "     << pjSelector_.jet2().pt()
+			<< " , 2nd jet eta: "    << pjSelector_.jet2().eta()
+			<< " , ht (HLT): "       << pjSelector_.htHLT()
+			<< " , MET: "            << pjSelector_.met().pt()
+			<< std::endl;
+
+	    }
+	}
+
         // Check on high b-tag multiplicity
         /*
         if ( pjSelector_.isPhotonValid() && pjSelector_.isJet2Valid() ) {
@@ -340,10 +378,6 @@ cout << "VS!!!"
         */
 	/*
         // Cross-check with Knut
-        if ( pjSelector_.isPhotonValid() && 
-	     pjSelector_.isJetValid() && 
-	     pjSelector_.isMetValid() ){
-
             const pat::MET & met = pjSelector_.met();
 
 	    if( met.pt() < 100. ){
@@ -492,6 +526,34 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         hists_[(prefix + "photonPtLowMet").c_str()] = fs.make<TH1F> ((prefix + "photonPtLowMet").c_str(), "pt", 150, 5., 1505.);
         hists_[(prefix + "photonPtLowMet").c_str()]->Sumw2();
 
+        hists_[(prefix + "photonPtLowMet1").c_str()] = fs.make<TH1F> ((prefix + "photonPtLowMet1").c_str(), "pt", 150, 5., 1505.);
+        hists_[(prefix + "photonPtLowMet1").c_str()]->Sumw2();
+
+        hists_[(prefix + "photonPtLowMet2").c_str()] = fs.make<TH1F> ((prefix + "photonPtLowMet2").c_str(), "pt", 150, 5., 1505.);
+        hists_[(prefix + "photonPtLowMet2").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet1").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2j").c_str(), "photonPtVsHthltLowMet2j", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHtjLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHtjLowMet").c_str(), "photonPtVsHtjLowMet", 150, 5., 1505., 250, 0., 2500.);
+        hists2D_[(prefix + "photonPtVsHtjLowMet").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHtjLowMet1").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHtjLowMet1").c_str(), "photonPtVsHtjLowMet", 150, 5., 1505., 250, 0., 2500.);
+        hists2D_[(prefix + "photonPtVsHtjLowMet1").c_str()]->Sumw2();
+
+        hists2D_[(prefix + "photonPtVsHtjLowMet2").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHtjLowMet2").c_str(), "photonPtVsHtjLowMet", 150, 5., 1505., 250, 0., 2500.);
+        hists2D_[(prefix + "photonPtVsHtjLowMet2").c_str()]->Sumw2();
+
+
 	/* -- MC Photon Studies -- */
         hists_[(prefix + "photonPdgId").c_str()] = fs.make<TH1F> ((prefix + "photonPdgId").c_str(), "pdg id", 50, 0., 50.);
         hists_[(prefix + "photonPdgId").c_str()]->Sumw2();
@@ -618,17 +680,6 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         hists_[(prefix + "ht").c_str()]->Sumw2();
         hists_[(prefix + "hthlt").c_str()] = fs.make<TH1F> ((prefix + "hthlt").c_str(), "hthlt", 250, 50., 2500.);
         hists_[(prefix + "hthlt").c_str()]->Sumw2();
-
-        hists_[(prefix + "hthltN90").c_str()] = fs.make<TH1F> ((prefix + "hthltN90").c_str(), "hthltN90", 150, -0., 1500.);
-        hists_[(prefix + "hthltN90").c_str()]->Sumw2();
-
-        hists_[(prefix + "hthltN90Hits").c_str()] = fs.make<TH1F> ((prefix + "hthltN90Hits").c_str(), "hthltN90Hits", 150, -0., 1500.);
-        hists_[(prefix + "hthltN90Hits").c_str()]->Sumw2();
-
-        hists_[(prefix + "n90HLTPhotonJet").c_str()] = fs.make<TH1F> ((prefix + "n90HLTPhotonJet").c_str(), "n90HLTPhotonJet", 100, -0., 100.);
-        hists_[(prefix + "n90HLTPhotonJet").c_str()]->Sumw2();
-        hists_[(prefix + "n90hitsHLTPhotonJet").c_str()] = fs.make<TH1F> ((prefix + "n90hitsHLTPhotonJet").c_str(), "n90hitsHLTPhotonJet", 100, -0., 100.);
-        hists_[(prefix + "n90hitsHLTPhotonJet").c_str()]->Sumw2();
 
         hists_[(prefix + "htj").c_str()] = fs.make<TH1F> ((prefix + "htj").c_str(), "htj", 150, -0., 1500.);
         hists_[(prefix + "htj").c_str()]->Sumw2();
@@ -774,12 +825,6 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         hists2D_[(prefix + "noJetsVsPhotonPtLowMet").c_str()] = fs.make<TH2F> ((prefix + "noJetsVsPhotonPtLowMet").c_str(), "noJetsVsPhotonPt", 15, 0., 15., 100, 5., 1005.);
         hists2D_[(prefix + "noJetsVsPhotonPtLowMet").c_str()]->Sumw2();
 
-        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
-        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()]->Sumw2();
-
-        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2j").c_str(), "photonPtVsHthltLowMet2j", 150, 5., 1505., 250, 50., 2500.);
-        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()]->Sumw2();
-
         hists2D_[(prefix + "metVsPhotonPt").c_str()] = fs.make<TH2F> ((prefix + "metVsPhotonPt").c_str(), "metVsPhotonPt", 100, -0., 1000., 150, 5., 1505.);
         hists2D_[(prefix + "metVsPhotonPt").c_str()]->Sumw2();
         hists2D_[(prefix + "metVsnoJet").c_str()] = fs.make<TH2F> ((prefix + "metVsnoJet").c_str(), "metVsnoJet", 100, -0., 1000., 20, 0., 20.);
@@ -813,15 +858,6 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         hists2D_[(prefix + "deltaRPhotonJetVsEtrelUncorr").c_str()]->Sumw2();
         hists2D_[(prefix + "deltaRPhotonJetVsEtrelGen").c_str()] = fs.make<TH2F> ((prefix + "deltaRPhotonJetVsEtrelGen").c_str(), "deltaRPhotonJetVsEtrelGen", 100, -0., 3.14, 100, -0., 3.);
         hists2D_[(prefix + "deltaRPhotonJetVsEtrelGen").c_str()]->Sumw2();
-
-        hists2D_[(prefix + "n90VsHTHLT").c_str()] = fs.make<TH2F> ((prefix + "n90VsHTHLT").c_str(), "n90VsHTHLT", 100, -0., 100, 150, -0., 1500.);
-        hists2D_[(prefix + "n90VsHTHLT").c_str()]->Sumw2();
-
-        hists2D_[(prefix + "n90VsJetPt").c_str()] = fs.make<TH2F> ((prefix + "n90VsJetPt").c_str(), "n90VsJetPt", 100, -0., 100, 100, -0., 1000.);
-        hists2D_[(prefix + "n90VsJetPt").c_str()]->Sumw2();
-
-        hists2D_[(prefix + "n90hitsVsn90HLTPhotonJet").c_str()] = fs.make<TH2F> ((prefix + "n90hitsVsn90HLTPhotonJet").c_str(), "n90hitsVsn90HLTPhotonJet", 100, -0., 100, 100, -0., 100.);
-        hists2D_[(prefix + "n90hitsVsn90HLTPhotonJet").c_str()]->Sumw2();
 
         hists2D_[(prefix + "combIsoVsPhotonPt").c_str()] = fs.make<TH2F> ((prefix + "combIsoVsPhotonPt").c_str(), "combIsoVsPhotonPt", 100, -0., 100., 150, 5., 1505.);
         hists2D_[(prefix + "combIsoVsPhotonPt").c_str()]->Sumw2();
@@ -939,57 +975,62 @@ void SelectionAnalyzer :: printBinsMETAbove100(PhotonJetSelector pjSelector, std
 
 }
 
+
 TH1F * SelectionAnalyzer :: rebinMETHistoForEventYields(TH1F * metHisto) {
-    std::vector<double> binEdges;
-    double oldmaximum = metHisto->GetBinLowEdge(metHisto->GetNbinsX() + 1);
-    binEdges.clear();
-    binEdges.push_back(0);
-    binEdges.push_back(10);
-    binEdges.push_back(20);
-    binEdges.push_back(30);
-    binEdges.push_back(40);
-    binEdges.push_back(50);
-    binEdges.push_back(60);
-    binEdges.push_back(70);
-    binEdges.push_back(80);
-    binEdges.push_back(90);
-    binEdges.push_back(99);
-    //binEdges.push_back(110);
-    binEdges.push_back(120);
-    //binEdges.push_back(130);
-    //binEdges.push_back(140);
-    //binEdges.push_back(149);
-    binEdges.push_back(159);
-    //binEdges.push_back(169);
-    //binEdges.push_back(179);
-    binEdges.push_back(199);
-    binEdges.push_back(269);
-    //binEdges.push_back(299);
-    binEdges.push_back(349);
-    //binEdges.push_back(399);
-    binEdges.push_back(449);
-    //binEdges.push_back(699);
-    binEdges.push_back(oldmaximum);
 
-    TH1F *hRebinned = (TH1F*) metHisto->Rebin(binEdges.size() - 1, metHisto->GetName(), &(binEdges.front()));
+  std::vector<double> binEdges;
+  double oldmaximum = metHisto->GetBinLowEdge(metHisto->GetNbinsX() + 1);
 
-    return hRebinned;
+  binEdges.clear();
+  binEdges.push_back(0);
+  binEdges.push_back(10);
+  binEdges.push_back(20);
+  binEdges.push_back(30);
+  binEdges.push_back(40);
+  binEdges.push_back(50);
+  binEdges.push_back(60);
+  binEdges.push_back(70);
+  binEdges.push_back(80);
+  binEdges.push_back(90);
+  binEdges.push_back(99);
+  binEdges.push_back(120);
+  binEdges.push_back(159);
+  binEdges.push_back(199);
+  binEdges.push_back(269);
+  binEdges.push_back(349);
+  binEdges.push_back(449);
+  binEdges.push_back(oldmaximum);
+
+  //binEdges.push_back(110);
+  //binEdges.push_back(130);
+  //binEdges.push_back(140);
+  //binEdges.push_back(149);
+  //binEdges.push_back(169);
+  //binEdges.push_back(179);
+  //binEdges.push_back(299);
+  //binEdges.push_back(399);
+  //binEdges.push_back(699);
+
+  TH1F *hRebinned = (TH1F*) metHisto->Rebin(binEdges.size() - 1, metHisto->GetName(), &(binEdges.front()));
+
+  return hRebinned;
 }
+
 
 void SelectionAnalyzer :: fillHistosSignalscan(const edm::EventBase& event, double weight, double weightNoPURescale, PhotonJetSelector pjSelector, std::string prefix, int squarkm, int gluinom, int neutrm) {
 
-    if (drawPlots_ && (squarkm != 0 || gluinom != 0)) {
-        if (pjSelector.isMetValid()) {
+  if (drawPlots_ && (squarkm != 0 || gluinom != 0)) {
+    if (pjSelector.isMetValid()) {
 
-            const pat::MET & met = pjSelector.met();
-            std::string app = pjSelector.getSignalScanPointName();
-            //std::cout << "Fill met SIGNALSCAN!"<<app << std::endl;
-            hists_[(prefix + "metPt_" + app).c_str()]->Fill(met.pt(), weight);
-        }
-
+      const pat::MET & met = pjSelector.met();
+      std::string app = pjSelector.getSignalScanPointName();
+      //std::cout << "Fill met SIGNALSCAN!"<<app << std::endl;
+      hists_[(prefix + "metPt_" + app).c_str()]->Fill(met.pt(), weight);
     }
+  }
 
 }
+
 
 void SelectionAnalyzer :: fillHistos( const edm::EventBase& event, double weight, double weightNoPURescale, 
 				      PhotonJetSelector pjSelector, std::string prefix, 
@@ -1000,11 +1041,25 @@ void SelectionAnalyzer :: fillHistos( const edm::EventBase& event, double weight
     // reweighting studies
     if (pjSelector.isPhotonValid()) {
       if( pjSelector.met().pt() <= 100. ) {
-	hists_[(prefix + "photonPtLowMet").c_str()]->Fill(pjSelector.correctedphotonpt(), weight);
 
-	hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight);
+	hists_[(prefix + "photonPtLowMet").c_str()]->Fill( pjSelector.correctedphotonpt(), weight );
+
+	hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight );
 	if( pjSelector.selectedJets().size() == 2 )
-	  hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight);
+	  hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight );
+
+	hists2D_[(prefix + "photonPtVsHtjLowMet").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htj(), weight );
+
+	if( pjSelector.met().pt() <= 50. ) {
+	  hists_[(prefix + "photonPtLowMet1").c_str()]->Fill( pjSelector.correctedphotonpt(), weight );
+	  hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight );
+	  hists2D_[(prefix + "photonPtVsHtjLowMet1").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htj(), weight );
+	} else {
+	  hists_[(prefix + "photonPtLowMet2").c_str()]->Fill( pjSelector.correctedphotonpt(), weight );
+	  hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htHLT(), weight );
+	  hists2D_[(prefix + "photonPtVsHtjLowMet2").c_str()] ->Fill( pjSelector.correctedphotonpt(), pjSelector.htj(), weight );	  
+	}
+
       }
     }
 
@@ -1207,17 +1262,6 @@ void SelectionAnalyzer :: fillHistos( const edm::EventBase& event, double weight
     if (pjSelector.isJetValid() || pjSelector.isPhotonValid()) {
       hists_[(prefix + "ht").c_str()]->Fill(pjSelector.ht(), weight);
       hists_[(prefix + "hthlt").c_str()]->Fill(pjSelector.htHLT(), weight);
-      hists_[(prefix + "hthltN90").c_str()]->Fill(pjSelector.htHLTN90(), weight);
-      hists_[(prefix + "hthltN90Hits").c_str()]->Fill(pjSelector.htHLTN90Hits(), weight);
-	  
-      hists_[(prefix + "n90HLTPhotonJet").c_str()]->Fill(pjSelector.n90HLTPhotonJet(), weight);
-      hists2D_[(prefix + "n90VsHTHLT").c_str()]->Fill(pjSelector.n90HLTPhotonJet(), pjSelector.htHLT(), weight);
-      hists2D_[(prefix + "n90VsJetPt").c_str()]->Fill(pjSelector.n90HLTPhotonJet(), pjSelector.hltPhotonJetPt(), weight);
-
-      if (pjSelector.hltPhotonJetId() != 0) {
-	hists_[(prefix + "n90hitsHLTPhotonJet").c_str()]->Fill(pjSelector.hltPhotonJetId()->n90Hits, weight);
-	hists2D_[(prefix + "n90hitsVsn90HLTPhotonJet").c_str()]->Fill(pjSelector.hltPhotonJetId()->n90Hits, pjSelector.n90HLTPhotonJet(), weight);
-      }
 
       hists_[(prefix + "htj").c_str()]->Fill(pjSelector.htj(), weight);
       hists_[(prefix + "mht").c_str()]->Fill(pjSelector.mht().pt(), weight);

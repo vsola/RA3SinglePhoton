@@ -36,10 +36,10 @@
  \brief Class of an EventSelector to apply a simple PhotonJet selection
 
  adapted to SinglePhoton analysis by Ulla Gebbert
- modified by Valentina Sola 16/08/2012
- 
+ modified by Valentina Sola 16/08/2012 
  modified by Christian Autermann 22.11.2012
 */
+
 // $Id: PhotonJetSelector.h,v 1.2 2012/11/26 14:24:05 auterman Exp $
 
 class TH1F;
@@ -142,37 +142,21 @@ class PhotonJetSelector: public EventSelector {
 	  //HT
 	  const double htj() const;
 
-
 	  const std::string getPhotonJECLevel(pat::Jet jet) const;
 
 
 	  //HT HLT
 	  const double htHLT() const;
-
-
-	  const double htHLTcalo() const;
-
-
-	  const double htHLTN90() const;
-
-	  const double htHLTN90Hits() const;
-
-
-	  const reco::JetID * hltPhotonJetId() const;
-
-
-	  const double n90HLTPhotonJet() const ;
-	  
+	  //double htHLT();
 
 	  const double hltPhotonJetPt() const ;
 
-
 	  const double hltPhotonJetPhi() const;
-	
-
+       
 	  const double hltVetoedElectronJets() const;
 
 	  const double hltVetoedMuonJets() const ;
+
 
 	  const double vetoedElectronJets() const;
 
@@ -185,15 +169,13 @@ class PhotonJetSelector: public EventSelector {
 	  const double ht() const;
 
 	  const math::XYZTLorentzVector mht() const;
-
 	  const math::XYZTLorentzVector mt() const;
 
 	  double getDeltaPhiJ1J2() ;
 	  
 	  double getDeltaPhiJ1Photon();
 	  
-	  std::vector<double> getEMFPhotonJets();
-	
+	  std::vector<double> getEMFPhotonJets();	
 	  std::vector<double> getEMFPhotonJetsInclEFrac();
 	
 	  std::vector<double> getResponsePhotonJets();	  
@@ -265,13 +247,7 @@ class PhotonJetSelector: public EventSelector {
 
 
 	  std::vector<pat::Jet> getHLTJets(edm::Handle<std::vector<pat::Jet> > jets);
-
-
-	  std::vector<pat::Jet> getHLTJetsCalo(edm::Handle<std::vector<pat::Jet> > jets);
-	
-
-	  std::vector<pat::Jet> getHLTJetPhoton(std::vector<pat::Jet> jets, std::vector<pat::Photon> photons);
-
+	  std::vector<pat::Jet> getHLTJetsAll(edm::Handle<std::vector<pat::Jet> > jets);
 
 	  std::vector<pat::Jet> getCleanJetsJetID(std::vector<pat::Jet> jets);
 
@@ -310,11 +286,11 @@ class PhotonJetSelector: public EventSelector {
 
 	  /// photon input
 	  edm::InputTag photonSrc_;
+	  edm::InputTag photonSrcHLT_;
 
 	  /// jet input
 	  edm::InputTag jetSrc_;
 	  edm::InputTag jetSrcHLT_;
-	  edm::InputTag jetSrcHLTcalo_;
 
 	  /// met input
 	  edm::InputTag metSrc_;
@@ -367,11 +343,11 @@ class PhotonJetSelector: public EventSelector {
 	  std::vector<pat::Jet> selectedBJets_;
 	  std::vector<pat::Jet> selectedJets_;
 	  std::vector<pat::Jet> selectedJetsHLT_;
-	  std::vector<pat::Jet> selectedJetsHLTcalo_;
-	  std::vector<pat::Jet> selectedJetPhotonsHLT_;
+	  std::vector<pat::Jet> selectedJetsHLTAll_;
 	  std::vector<pat::Jet> selectedJetElectronsHLT_;
 	  std::vector<pat::Jet> selectedJetMuonsHLT_;
 	  std::vector<pat::Photon> selectedPhotons_;
+	  std::vector<pat::Photon> selectedPhotonsHLT_;
 	  std::vector<std::pair<double, double> > deltaRVsEtrel_;
 	  std::vector<std::pair<double, double> > deltaRVsEtrelUncorr_;
 	  std::vector<std::pair<double, double> > deltaRVsEtrelGen_;
@@ -406,8 +382,6 @@ class PhotonJetSelector: public EventSelector {
 	  index_type Mj13_;
 	  index_type HT_;
 	  index_type HTHLT_;
-	  index_type HTHLTcalo_;
-	  index_type HTHLTN90_;
 	  index_type HTJ_;
 	  index_type MHT_;
 	  index_type MHTJ_;

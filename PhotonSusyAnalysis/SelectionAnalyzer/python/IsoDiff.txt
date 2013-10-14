@@ -1,0 +1,99 @@
+28a29
+> #	quickScanForQCDEstOnly = False
+99c100
+< #    	process.maxEvents         = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+---
+> #    	process.maxEvents         = cms.untracked.PSet( input = cms.untracked.int32(2000) )
+451d451
+< 	cutForPhotonIdTightISO = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && ((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")))<6.0'
+453c453,454
+< 	cutForPhotonIdTight = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")))< 6 && sigmaIetaIeta()<0.011 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+---
+> 	#cutForPhotonIdTight = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")))< 6 && sigmaIetaIeta()<0.011 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+> 	cutForPhotonIdTight = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")))< 6 && sigmaIetaIeta()<0.011 && sigmaIetaIeta()>0.001'
+457d457
+< 	cutForPhotonIdTightNoPixelVetoISO = 'hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && ((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")))<6.0'
+459c459,460
+< 	cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< 6 && sigmaIetaIeta()<0.011 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+---
+> 	#cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< 6 && sigmaIetaIeta()<0.011 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+> 	cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< 6 && sigmaIetaIeta()<0.011 && sigmaIetaIeta()>0.001'
+463d463
+< 	cutForFODenominatorISO = '!hasPixelSeed()&&r9()<1.0&&sigmaIetaIeta()>0.001&&userFloat("sigmaIphiIphi")>0.001&&sigmaIetaIeta()<0.015&&hadTowOverEm()<0.05&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )<min(30,0.3*pt)&&( sigmaIetaIeta()>0.012||((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )>6.0)'
+465c465,470
+< 	cutForFODenominator = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< min(30,0.3*pt) && (((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )> 6 || sigmaIetaIeta()>=0.011 ) && sigmaIetaIeta()<=0.014 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+---
+> 	#cutForFODenominator = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< min(30,0.3*pt) && (((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )> 6 || sigmaIetaIeta()>=0.011 ) && sigmaIetaIeta()<=0.014 && hadronicOverEm()<0.05 && sigmaIetaIeta()>0.001'
+> 	cutForFODenominator = '!hasPixelSeed()&&r9()<1.0&&((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )< min(30,0.3*pt) && (((ecalRecHitSumEtConeDR03()-0.081*userFloat("rhoPU")) + (hcalTowerSumEtConeDR03()-0.022*userFloat("rhoPU")) + (trkSumPtSolidConeDR03()-0.011*userFloat("rhoPU")) )> 6 || sigmaIetaIeta()>=0.011 ) && sigmaIetaIeta()<=0.014 && sigmaIetaIeta()>0.001'
+> 
+> 
+>         #New Photon ID Studies
+> 	cutForPhotonIdTightISO = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && sigmaIetaIeta()<0.012 && userFloat("chargedIsoCor")<2.6 && userFloat("neutralIsoCor")<(3.5+0.04*pt) && userFloat("photonIsoCor")<(1.3+0.005*pt)'
+503,519d507
+< 
+< 	# For IsoVar Studies
+< 	process.myphotonselectionISO  = process.selectedPatPhotons.clone(
+< 		src = 'selectedPhotonsWithRhoAndIsos',
+< 		cut = photonKinematicCuts+' && '+cutForPhotonIdTightISO
+< 	       )
+< 
+< 	process.myphotonselectionPixelSeedISO  = process.selectedPatPhotons.clone(
+< 		src = 'selectedPhotonsWithRhoAndIsos',
+< 		cut = photonKinematicCuts+' && '+cutForPhotonIdTightNoPixelVetoISO
+< 	       )	
+< 	                                     
+< 	process.myphotonselectionFOISO  = process.selectedPatPhotons.clone(
+< 		src = 'selectedPhotonsWithRhoAndIsos',
+< 		cut = photonKinematicCuts+' && '+cutForFODenominatorISO
+< 	       )
+< 
+739,777d726
+< 	# ==1 Photon, =2jets +++ ISO Studies
+< 	process.select_1ph_2jetsISO = process.selectionPlotMaker.clone();
+< 	process.select_1ph_2jetsISO.selection.photonSrc = ('myphotonselectionLoose')
+< 	process.select_1ph_2jetsISO.selection.jetSrc    = ('myjetselection')
+< 	process.select_1ph_2jetsISO.selection.cutsToUse = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
+< 								      "photonEta","photonPt","jetEta","MET")
+< 	process.select_1ph_2jetsISO.cutsForPresel       = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
+< 								      "photonEta","photonPt","jetEta")
+< 	process.select_1ph_2jetsISO.selection.requireGenForSelection = False
+< 
+< 	process.select_1ph_2jets_PixelSeedCorrISO                            = process.select_1ph_2jetsISO.clone();
+< 	process.select_1ph_2jets_PixelSeedCorrISO.selection.photonSrc        = ('myphotonselectionPixelSeedISO')
+< 	process.select_1ph_2jets_PixelSeedCorrISO.applyEWKFakeRateCorrection = True
+< 	process.select_1ph_2jets_PixelSeedCorrISO.applyEWKFakeRatePar1       = 0.015
+< 	process.select_1ph_2jets_PixelSeedCorrISO.applyEWKFakeRateParErr1    = 0.001
+< 
+< 	process.select_1ph_2jets_FOISO                      = process.select_1ph_2jetsISO.clone();
+< 	process.select_1ph_2jets_FOISO.selection.photonSrc  = ('myphotonselectionFOISO')
+< 	process.select_1ph_2jets_FOISO.selection.isPhotonFO = True
+< 
+< 	process.select_1ph_2jets_FO_CorrISO                                    = process.select_1ph_2jetsISO.clone();
+< 	process.select_1ph_2jets_FO_CorrISO.selection.photonSrc                = ('myphotonselectionFOISO')
+< 	process.select_1ph_2jets_FO_CorrISO.selection.isPhotonFO               = True
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateSystFit               = 0.10
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateSystLowHighMet        = 0.05
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateSystSMCont            = 0.00
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateCorrectionHisto       = True
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateCorrectionHistoName   = "QCDEst_3jet_Data"
+< 	process.select_1ph_2jets_FO_CorrISO.applyFakeRateCorrectionHistoName2j = "QCDEst_2jet_Data"
+< 
+< 	process.select_1ph_2jets_FO_CorrMCISO                                    = process.select_1ph_2jets_FO_CorrISO.clone();
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateSystFit               = 0.20
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateSystLowHighMet        = 0.05
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateSystSMCont            = 0.00
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateCorrectionHisto       = True
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateCorrectionHistoName   = "QCDEst_3jet_MC"
+< 	process.select_1ph_2jets_FO_CorrMCISO.applyFakeRateCorrectionHistoName2j = "QCDEst_2jet_MC"
+< 	
+< 
+1212d1160
+< 				process.selectionSequence *= process.select_1ph_2jets_PixelSeedCorrISO
+1218d1165
+< 			process.selectionSequence *= process.select_1ph_2jetsISO
+1222d1168
+< 			process.selectionSequence *= process.select_1ph_2jets_FOISO
+1230,1232d1175
+< 			process.selectionSequence *= process.select_1ph_2jets_FO_CorrISO
+< 			process.selectionSequence *= process.select_1ph_2jets_FO_CorrMCISO
+< 

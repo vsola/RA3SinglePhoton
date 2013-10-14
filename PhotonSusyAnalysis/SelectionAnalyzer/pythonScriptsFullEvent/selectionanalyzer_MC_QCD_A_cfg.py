@@ -15,7 +15,7 @@ process.TFileService = cms.Service("TFileService", fileName = cms.string("histo.
 test = False
 import PhotonSusyAnalysis.SelectionAnalyzer.selectionanalyzer_multi_cfg as baseConfig
 doSkimming        = True
-doAnalysis        = True
+doAnalysis        = False
 noKinematicPresel = False
 PUDistributionMC  = cms.vdouble(0)
 baseConfig.getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,"",noKinematicPresel,PUDistributionMC,0)

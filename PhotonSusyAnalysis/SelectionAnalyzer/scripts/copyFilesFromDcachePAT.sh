@@ -25,8 +25,8 @@ for dirnameTree in ${dirnameTrees[@]};
  for name in `dcls /pnfs/desy.de/cms/tier2/store/user/vsola/$dirnameTree/`;
  #for name in ${namesfound[@]}
  do
-  if [[  $name == *V05w*  ]]
-#  if [[  $name == *T09*  ]]
+   if [[ $name == *V10* ]]
+#  if [[ $name == *QCD*T09bis* ]]
 #  if [[ $name == *PhotonHadReReco_22Jan2013*_V05* ]]
 
   then 
