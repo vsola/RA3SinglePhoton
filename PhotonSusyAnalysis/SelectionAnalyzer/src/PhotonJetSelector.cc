@@ -506,16 +506,6 @@ const std::string PhotonJetSelector::getSignalScanPointName() {
 }
 
 
-//HT just from jets
-const double PhotonJetSelector::htj() const {
-  double ht = 0;
-  for (std::vector<pat::Jet>::const_iterator jetsBegin = selectedJets_.begin(), jetsEnd = selectedJets_.end(), ijet = jetsBegin; ijet != jetsEnd; ++ijet) {
-    ht += ijet->pt();
-  }
-  return ht;
-}
-
-
 //
 const std::string PhotonJetSelector::getPhotonJECLevel(pat::Jet jet) const {
 
@@ -523,6 +513,36 @@ const std::string PhotonJetSelector::getPhotonJECLevel(pat::Jet jet) const {
   jecleveltouse = jet.currentJECLevel();
 
   return jecleveltouse;
+}
+
+
+// HT for Presel
+const double PhotonJetSelector::ht() const {
+  double ht = 0;
+
+  for (std::vector<pat::Jet>::const_iterator jetsBegin = selectedJets_.begin(), jetsEnd = selectedJets_.end(), ijet = jetsBegin; ijet != jetsEnd; ++ijet) {
+    ht += ijet->pt();
+  }
+  
+  for (std::vector<pat::Photon>::const_iterator photonBegin = selectedPhotons_.begin(), photonEnd = selectedPhotons_.end(), iphoton = photonBegin; iphoton != photonEnd; ++iphoton) {
+    if (iphoton->userFloat("ptMatchedJet") != 0) {
+      ht += iphoton->userFloat("ptMatchedJet");
+    } else {
+      ht += iphoton->pt();
+    }
+    break;
+  }
+  return ht;
+}
+
+
+// HT just from jets
+const double PhotonJetSelector::htj() const {
+  double ht = 0;
+  for (std::vector<pat::Jet>::const_iterator jetsBegin = selectedJets_.begin(), jetsEnd = selectedJets_.end(), ijet = jetsBegin; ijet != jetsEnd; ++ijet) {
+    ht += ijet->pt();
+  }
+  return ht;
 }
 
 
@@ -601,17 +621,6 @@ const math::XYZTLorentzVector PhotonJetSelector::mhtj() const {
     v_ht += ijet->p4();
   }
   return v_ht;
-}
-
-
-const double PhotonJetSelector::ht() const {
-  double ht = 0;
-
-  for (std::vector<pat::Jet>::const_iterator jetsBegin = selectedJets_.begin(), jetsEnd = selectedJets_.end(), ijet = jetsBegin; ijet != jetsEnd; ++ijet) {
-    ht += ijet->pt();
-  }
-
-  return ht;
 }
 
 

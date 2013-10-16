@@ -430,7 +430,8 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	cutForFODenominator = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")>0.26 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")>(0.35+0.004*pt) && userFloat("neutralIsoCor")<(35.0+0.4*pt) && userFloat("photonIsoCor")>(0.13+0.0005*pt) && userFloat("photonIsoCor")<(13.0+0.05*pt) && ( userFloat("chargedIsoCor")>2.6) || userFloat("neutralIsoCor")>(3.5+0.04*pt) || userFloat("photonIsoCor")>(1.3+0.005*pt)'
 
 	# Photon_hlt
-	cutForPhotonIdHLT = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")<(35.0+0.4*pt) && userFloat("photonIsoCor")<(13.0+0.05*pt)'
+	cutForPhotonIdHLT = cutForFODenominator+"||"+ cutForPhotonIdTight 
+	# cutForPhotonIdHLT = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")<(35.0+0.4*pt) && userFloat("photonIsoCor")<(13.0+0.05*pt)'
 
 
 	# Only used in myphotonselectionLoose
@@ -445,8 +446,8 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	                                     
 	process.myphotonselectionTRIGGEREFF  = process.selectedPatPhotons.clone(
 		src = 'selectedPhotonsWithRhoAndIsos',
-		cut = 'pt>85 && isEB() && '+cutForPhotonIdTight #VS!!!
-#		cut = 'pt>80 && isEB() && '+cutForPhotonIdTight #VS!!! Trigger
+		#cut = 'pt>85 && isEB() && '+cutForPhotonIdTight #VS!!!
+		cut = 'pt>80 && isEB() && '+cutForPhotonIdTight #VS!!! Trigger
 	       )
 	
 	process.myphotonselectionTRIGGEREFFLowPt  = process.selectedPatPhotons.clone(
@@ -459,11 +460,32 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 		cut = photonKinematicCuts+' && '+cutForPhotonIdTightNoPixelSeedVeto
 	       )
 	
+	process.myphotonselectionTRIGGEREFFPS  = process.selectedPatPhotons.clone(
+		src = 'selectedPhotonsWithRhoAndIsos',
+		#cut = 'pt>85 && isEB() && '+cutForPhotonIdTightNoPixelSeedVeto
+		cut = 'pt>80 && isEB() && '+cutForPhotonIdTightNoPixelSeedVeto
+	       )
+	
+	process.myphotonselectionTRIGGEREFFLowPtPS  = process.selectedPatPhotons.clone(
+		src = 'selectedPhotonsWithRhoAndIsos',
+		cut = 'pt>50 && isEB() && '+cutForPhotonIdTightNoPixelSeedVeto
+	       )
+	                                     
 	process.myphotonselectionFO  = process.selectedPatPhotons.clone(
 		src = 'selectedPhotonsWithRhoAndIsos',
 		cut = photonKinematicCuts+' && '+cutForFODenominator
+	       )	                                     
+	
+	process.myphotonselectionTRIGGEREFFFO  = process.selectedPatPhotons.clone(
+		src = 'selectedPhotonsWithRhoAndIsos',
+		#cut = 'pt>85 && isEB() && '+cutForFODenominator
+		cut = 'pt>80 && isEB() && '+cutForFODenominator
 	       )
-	                                     
+	
+	process.myphotonselectionTRIGGEREFFLowPtFO  = process.selectedPatPhotons.clone(
+		src = 'selectedPhotonsWithRhoAndIsos',
+		cut = 'pt>50 && isEB() && '+cutForFODenominator
+	       )
 	                                     
 	process.myphotonselectionLoose  = process.selectedPatPhotons.clone(
 		src = 'selectedPhotonsWithRhoAndIsos',
@@ -544,8 +566,8 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_All_HT_Nominator                     = process.select_All.clone()
 	process.select_All_HT_Nominator.selection.cutsToUse = cms.vstring("HTHLT",">= 1 Photons")
 	process.select_All_HT_Nominator.cutsForPresel       = cms.vstring("HTHLT",">= 1 Photons")
-#	process.select_All_HT_Nominator.selection.HTHLT     = 750 #VS!!!
-	process.select_All_HT_Nominator.selection.HTHLT     = 450 #VS!!! Trigger
+	process.select_All_HT_Nominator.selection.HTHLT     = 750 #VS!!!
+#	process.select_All_HT_Nominator.selection.HTHLT     = 500 #VS!!! Trigger
 	process.select_All_HT_Nominator.selection.photonSrc = ('myphotonselectionTRIGGEREFFLowPt')
 		
 	process.select_All_HT_Denominator                   = process.select_All_HT_Nominator.clone()
@@ -558,7 +580,25 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_All_Photon_Nominator.selection.photonSrc = ('myphotonselectionTRIGGEREFF')
 	
 	process.select_All_Photon_Denominator                   = process.select_All_Photon_Nominator.clone()
-	
+
+
+	process.select_All_HT_Nominator_PS                     = process.select_All_HT_Nominator.clone()
+	process.select_All_HT_Nominator_PS.selection.photonSrc = ('myphotonselectionTRIGGEREFFLowPtPS')
+	process.select_All_HT_Denominator_PS                   = process.select_All_HT_Nominator_PS.clone()
+
+	process.select_All_Photon_Nominator_PS                     = process.select_All_Photon_Nominator.clone()
+	process.select_All_Photon_Nominator_PS.selection.photonSrc = ('myphotonselectionTRIGGEREFFPS')
+	process.select_All_Photon_Denominator_PS                   = process.select_All_Photon_Nominator_PS.clone()
+
+
+	process.select_All_HT_Nominator_FO                     = process.select_All_HT_Nominator.clone()
+	process.select_All_HT_Nominator_FO.selection.photonSrc = ('myphotonselectionTRIGGEREFFLowPtFO')
+	process.select_All_HT_Denominator_FO                   = process.select_All_HT_Nominator_FO.clone()
+
+	process.select_All_Photon_Nominator_FO                     = process.select_All_Photon_Nominator.clone()
+	process.select_All_Photon_Nominator_FO.selection.photonSrc = ('myphotonselectionTRIGGEREFFFO')
+	process.select_All_Photon_Denominator_FO                   = process.select_All_Photon_Nominator_FO.clone()
+
 	
 	################################################################################################
 	# ==1 Photon, >=2jets
@@ -583,7 +623,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRateCorrection = True
 	if isData is True:
 		process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-		process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+		process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	else:
 		process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 		process.select_1ph_2jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
@@ -607,7 +647,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.selection.photonSrc        = ('myphotonselectionPixelSeed')
 	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateCorrection = True
 #	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-#	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+#	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
 	process.select_1ph_2jets_GenEleVetoPixelSeedCorr.selection.genEleVeto       = 2 # NO electron gen
@@ -630,7 +670,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.selection.photonSrc        = ('myphotonselectionPixelSeed')
 	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateCorrection = True
 #	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-#	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+#	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
 	process.select_1ph_2jets_GenEleVetoRePixelSeedCorr.selection.genEleVeto       = 1 # electron gen
@@ -692,7 +732,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRateCorrection = True
 	if isData is True:
 		process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-		process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+		process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	else:
 		process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 		process.select_1ph_3jets_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
@@ -716,7 +756,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.selection.photonSrc=('myphotonselectionPixelSeed')
 	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateCorrection = True
 #	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-#	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+#	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
 	process.select_1ph_3jets_GenEleVetoPixelSeedCorr.selection.genEleVeto       = 2 # NO electron gen
@@ -790,7 +830,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.selection.photonSrc              = ('myphotonselectionPixelSeed')
 	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateCorrection       = True
 #	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRatePar1             = 0.0157 # DATA #
-#	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1          = 0.0017
+#	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1          = 0.0080
 	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRatePar1             = 0.0084 #  MC  #
 	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.applyEWKFakeRateParErr1          = 0.0009
 	process.select_1ph_3jets_GenEleVetoRePixelSeedCorr.selection.genEleVeto             = 1
@@ -849,7 +889,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRateCorrection = True
 	if isData is True:
 		process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0157 # DATA #
-		process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0017
+		process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0080
 	else:
 		process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRatePar1       = 0.0084 #  MC  #
 		process.select_1ph_2jets_1b_PixelSeedCorr.applyEWKFakeRateParErr1    = 0.0009
@@ -1113,9 +1153,17 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 
 	if doTriggerEffStudy is True:
 		process.selectionSequence *= process.myphotonselectionTRIGGEREFF*process.myphotonselectionTRIGGEREFFLowPt
+		process.selectionSequence *= process.myphotonselectionTRIGGEREFFPS*process.myphotonselectionTRIGGEREFFLowPtPS
+		process.selectionSequence *= process.myphotonselectionTRIGGEREFFFO*process.myphotonselectionTRIGGEREFFLowPtFO
 		
 		process.selectionSequence *= (process.select_All_HT_Denominator+process.select_All_Photon_Denominator)
 		process.selectionSequence *= process.photon2012_HLT_data*(process.select_All_HT_Nominator+process.select_All_Photon_Nominator)
+		
+		process.selectionSequence *= (process.select_All_HT_Denominator_PS+process.select_All_Photon_Denominator_PS)
+		process.selectionSequence *= process.photon2012_HLT_data*(process.select_All_HT_Nominator_PS+process.select_All_Photon_Nominator_PS)
+		
+		process.selectionSequence *= (process.select_All_HT_Denominator_FO+process.select_All_Photon_Denominator_FO)
+		process.selectionSequence *= process.photon2012_HLT_data*(process.select_All_HT_Nominator_FO+process.select_All_Photon_Nominator_FO)
 		
 		
 	
