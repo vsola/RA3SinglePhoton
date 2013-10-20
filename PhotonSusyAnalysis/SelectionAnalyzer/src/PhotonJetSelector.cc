@@ -327,7 +327,8 @@ bool PhotonJetSelector::isPhotonValid() {
 
 double const PhotonJetSelector::photonptTRIG() const {
   if(photon_ != 0)
-    return photon_->pt();
+    //    return photon_->pt();
+    return photon_->userFloat("ptMatchedJet");
   else return 0;
 }
 
@@ -550,14 +551,18 @@ const double PhotonJetSelector::htj() const {
 const double PhotonJetSelector::htHLT() const {
   double ht = 0;
 
+  
   cout << "HTHLT" << endl;
   cout << "HTHLT - # of HLT jets = " << selectedJetsHLT_.size() << endl;
+  
+
   for ( std::vector<pat::Jet>::const_iterator jetsBegin = selectedJetsHLT_.begin(), jetsEnd = selectedJetsHLT_.end(), 
 	  ijet = jetsBegin; ijet != jetsEnd; ++ijet ) {
     ht += ijet->pt();
     cout << "HTHLT - selectedJetsHLT_ pT = " << ijet->pt() << endl;
   }//loop on selectedJetsHLT_
 
+  
   cout << "HTHLT - Intermediate HT = " << ht << endl;
 
   cout << "HTHLT - # of photons =      " << selectedPhotons_.size() << endl;
@@ -565,12 +570,14 @@ const double PhotonJetSelector::htHLT() const {
   cout << "HTHLT - # of ALL HLT jets = " << selectedJetsHLTAll_.size() << endl;
 
   int np = 1;
+  
+
+  bool jetAlreadyMatched = false;
 
   for ( std::vector<pat::Photon>::const_iterator photonBegin = selectedPhotonsHLT_.begin(), 
 	  photonEnd = selectedPhotonsHLT_.end(), iphoton = photonBegin; iphoton != photonEnd; ++iphoton ) {
 
     double photonPt = iphoton->pt();
-
     cout << "HTHLT - photonPt = " << photonPt << " for photon # = " << np << endl;
 
     for ( std::vector<pat::Jet>::const_iterator jetsBegin = selectedJetsHLTAll_.begin(), 
@@ -581,12 +588,14 @@ const double PhotonJetSelector::htHLT() const {
 
       double deltaR_ = reco::deltaR(ph, jet);
  
-      double ETRel = jet.pt() / photon.pt();
+      double ETRel = jet.pt() / ph.pt();
       if (jet.jecSetsAvailable() && jet.isPFJet()) 
-	ETRel = jet.correctedJet( getPhotonJECLevel(jet) ).pt() / photon.pt();
+	ETRel = jet.correctedJet( getPhotonJECLevel(jet) ).pt() / ph.pt();
   
-      if ( deltaR_ < 0.3 && ETRel >= 0.95 )
-	photonPt = ijeta->pt();      
+      if ( deltaR_ < 0.3 && ETRel >= 0.95 && !jetAlreadyMatched ){
+	photonPt = ijeta->pt();
+	jetAlreadyMatched = true;
+      }
 
     }// loop on selectedJetsHLTAll_
     cout << "HTHLT - photonPt = " << photonPt << " for photon # = " << np << endl;
@@ -596,9 +605,10 @@ const double PhotonJetSelector::htHLT() const {
     np++;
   }// loop on selectedPhotonsHLT_
 
+  
   cout << "HTHLT - Final HT = " << ht << endl;
   cout << "HTHLT" << endl;
-
+  
   
   return ht;
 }
@@ -1247,7 +1257,7 @@ bool PhotonJetSelector::operator ()(const edm::EventBase & event, pat::strbitset
 	    } else {
 	      selectedPhotons_  = getCleanPhotons(photons); //PHOTONS (eta selected)
 	    }
-	    selectedPhotonsHLT_ = getCleanPhotons(photonsHLT); //HLT PHOTONS (eta selected)
+	    selectedPhotonsHLT_ = getCleanPhotonsHLT(photonsHLT); //HLT PHOTONS (eta selected)
 
 	    if (useGenForSelection_) {
 	      selectedJets_ = getGenJets(getCleanJets(jets));
@@ -1988,7 +1998,8 @@ void PhotonJetSelector::crosscleanSelectedPhotonsAndJets(bool applyPhotonIso) {
       if (!jetFound) {
 	//photon ok, not overlapping with 'better' jet, use photon
 	pat::Photon p = *iphoton;
-	p.addUserFloat("ptMatchedJet", (float) 0);
+	//	p.addUserFloat("ptMatchedJet", (float) 0);
+	p.addUserFloat("ptMatchedJet", p.pt());
 
 	crosscleanedPhotons.push_back(p);
       }//no photon-jet overlapping
@@ -2150,7 +2161,7 @@ std::vector<pat::Jet> PhotonJetSelector::getHLTJetsAll(edm::Handle<std::vector<p
 
   }//for jetsHLT
    
-  retjets = getCleanJetsJetID(retjets); // jetID cleaning
+  //  retjets = getCleanJetsJetID(retjets); // jetID cleaning
 
   return retjets;
 }
@@ -2431,6 +2442,29 @@ std::vector<pat::Photon> PhotonJetSelector::getCleanPhotons(edm::Handle<std::vec
     bool passPhotonEta = false;
 	      
     if (abs(iphoton->eta()) < cut(photonEta_, double())) {
+      passPhotonEta = true;
+    }//if eta
+
+    if (passPhotonEta)
+      ret.push_back(*iphoton);
+
+  }//loop photons
+
+  return ret;
+}
+
+
+//
+std::vector<pat::Photon> PhotonJetSelector::getCleanPhotonsHLT(edm::Handle<std::vector<pat::Photon> > photons) {
+	    
+  std::vector<pat::Photon> ret;
+
+  for (std::vector<pat::Photon>::const_iterator photonBegin = photons->begin(), 
+	 photonEnd = photons->end(), iphoton = photonBegin; iphoton != photonEnd; ++iphoton) {
+
+    bool passPhotonEta = false;
+	      
+    if ( abs(iphoton->eta()) < cut( photonEta_, double() ) && ( iphoton->pt() > 40. ) ) {
       passPhotonEta = true;
     }//if eta
 
