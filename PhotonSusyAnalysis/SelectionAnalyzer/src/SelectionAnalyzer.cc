@@ -131,6 +131,10 @@ SelectionAnalyzer :: SelectionAnalyzer(const edm::ParameterSet& cfg, TFileDirect
     if ( loggingVerbosity_ > 1 )
       std::cout << "constructor done:" << c << std::endl;
 
+    // test
+    srcRho_ = cfg.getParameter<edm::InputTag> ("srcRho");
+
+
     f->Close();
     delete f;
     fHT->Close();
@@ -316,7 +320,7 @@ void SelectionAnalyzer :: analyze(const edm::EventBase& event) {
         if (pjSelector_.met().pt() >= 350)
             evtCounter350_ += weight;
 
-
+	/*
         if ( pjSelector_.isPhotonValid() && 
 	     pjSelector_.isJetValid()    && 
 	     pjSelector_.isJet2Valid()   && 
@@ -354,6 +358,7 @@ void SelectionAnalyzer :: analyze(const edm::EventBase& event) {
 
 	    }
 	}
+	*/
 
         // Check on high b-tag multiplicity
         /*
@@ -376,33 +381,68 @@ cout << "VS!!!"
             }
         }//end b-tag checks
         */
-	/*
+	
+	/*	
         // Cross-check with Knut
-            const pat::MET & met = pjSelector_.met();
+        if ( pjSelector_.isPhotonValid() && 
+	     pjSelector_.isJetValid()    && 
+	     pjSelector_.isJet2Valid()   && 
+	     pjSelector_.isMetValid()    ){
 
-	    if( met.pt() < 100. ){
-	      const pat::Photon & photon = pjSelector_.photon();
-	      
-	      std::cout << "VS!!!"
-			<< " - lumis: "          << event.eventAuxiliary().luminosityBlock()
-			<< " , run: "            << event.eventAuxiliary().run()
-			<< " , event#: "         << event.eventAuxiliary().event()
-			<< "-> photon Pt: "      << photon.pt()
-			<< " , corr photon Pt: " << pjSelector_.correctedphotonpt()
-			<< " , photon eta: "     << photon.eta()
-			<< " , # of jets: "      << pjSelector_.selectedJets().size()
-			<< " , 1st jet Pt: "     << pjSelector_.jet().pt()
-			<< " , 1st jet eta: "    << pjSelector_.jet().eta()
-			<< " , 2nd jet Pt: "     << pjSelector_.jet2().pt()
-			<< " , 2nd jet eta: "    << pjSelector_.jet2().eta()
-			<< " , ht (HLT): "       << pjSelector_.htHLT()
-			<< " , MET: "            << met.pt()
-			<< std::endl
-			<< std::endl;
+	  const pat::MET & met = pjSelector_.met();
 
-            }
-        }//end Knut checks
-	*/        
+	  //	  if( met.pt() < 100. ){
+	    const pat::Photon & photon = pjSelector_.photon();
+
+
+	    edm::Handle<double> rhoH;
+	    event.getByLabel(srcRho_, rhoH);
+
+//	      # runNumber : luminosityBlockNumber : eventNumber
+//	      # met =
+//	      # ht =
+//	      # weight = (only for MC of course)
+//	      # 1.photonPt =
+//	      # 1.photonPtOfMatchedJet =
+//	      # nJets =
+//	      # 1.jetPt =
+//	      # 1.jetEta =  
+
+	    std::cout << "VS!!!"
+		      << " # "                          << event.eventAuxiliary().run()
+		      << " : "                          << event.eventAuxiliary().luminosityBlock()
+		      << " : "                          << event.eventAuxiliary().event()
+		      << " # rho = "                    << *rhoH
+		      << " # met = "                    << met.pt()
+		      << " # ht = "                     << pjSelector_.htHLT()
+		      << " # weight = "                 << weight
+		      << " # 1.photonPt =  "            << pjSelector_.photon().pt()
+		      << " # 1.photonPtOfMatchedJet = " << pjSelector_.correctedphotonpt()
+		      << " # 1.photon chargedIsoCor =  "<< pjSelector_.photon().userFloat("chargedIsoCor")
+		      << " # 1.photon photonIsoCor =  " << pjSelector_.photon().userFloat("photonIsoCor")
+		      << " # 1.photon neutralIsoCor =  "<< pjSelector_.photon().userFloat("neutralIsoCor")
+		      << " # nJets "                    << pjSelector_.selectedJets().size()
+		      << " # 1.jetPt = "                << pjSelector_.jet().pt()
+		      << " # 1.jetEta = "               << pjSelector_.jet().eta()
+		      << " # 1.jetArea = "              << pjSelector_.jet().jetArea()
+		      << " # 1.jet Uncorr = "           << pjSelector_.jet().correctedJet("Uncorrected")
+		      << " # 1.jet L1Fast = "           << pjSelector_.jet().correctedJet("L1FastJet") //knut
+		      << " # 1.jet L2Rel = "            << pjSelector_.jet().correctedJet("L2Relative")
+		      << " # 1.jet L3Abs = "            << pjSelector_.jet().correctedJet("L3Absolute")
+		      << " # 1.jet L2L3Res = "          << pjSelector_.jet().correctedJet("L2L3Residual")
+		      << " # 2.jetPt = "                << pjSelector_.jet2().pt()
+		      << " # 2.jetEta = "               << pjSelector_.jet2().eta()
+		      << " # 2.jetArea = "              << pjSelector_.jet2().jetArea()
+		      << " # 2.jet Uncorr = "           << pjSelector_.jet2().correctedJet("Uncorrected")
+		      << " # 2.jet L1Fast = "           << pjSelector_.jet2().correctedJet("L1FastJet") //knut
+		      << " # 2.jet L2Rel = "            << pjSelector_.jet2().correctedJet("L2Relative")
+		      << " # 2.jet L3Abs = "            << pjSelector_.jet2().correctedJet("L3Absolute")
+		      << " # 2.jet L2L3Res = "          << pjSelector_.jet2().correctedJet("L2L3Residual")
+		      << std::endl
+		      << std::endl;
+	    //}
+        }//end Knut checks	        
+	*/
 
     }//if passesAllaCutsExceptPresel
 

@@ -287,16 +287,16 @@ applyTechnicalPreselectionData2010 = cms.Sequence(
     hltPhysicsDeclared*
     oneGoodVertexFilter*
     noScraping*
-    HBHENoiseFilter*
+    HBHENoiseFilter* #ok
     hcalLaserEventFilter*
     goodVertices*
     ak5PFJetsL2L3Residual*
-    trackingFailureFilter*
-    trkPOGFilters*
-    CSCTightHaloFilter*
-    EcalDeadCellBoundaryEnergyFilter*
-    eeBadScFilter*
-    ecalLaserCorrFilter*
+    trackingFailureFilter* #ok
+    trkPOGFilters*         #ok
+    CSCTightHaloFilter*    #ok
+    EcalDeadCellBoundaryEnergyFilter* 
+    eeBadScFilter*       #ok
+    ecalLaserCorrFilter* #ok
     oneGoodVertexNoProducer*
     photon2012_HLT_data
  )
@@ -318,8 +318,8 @@ applyTechnicalPreselectionDataTriggerStudies = cms.Sequence(
     ecalLaserCorrFilter*
     oneGoodVertexNoProducer*
 #   photon2012_HLT_data_triggerEff_PFHT650
-#   photon2012_HLT_data_triggerEff_Photon150
-    photon2012_HLT_data_triggerEff_Photon75
+    photon2012_HLT_data_triggerEff_Photon150
+#   photon2012_HLT_data_triggerEff_Photon75
 #   photon2012_HLT_data_triggerEff_PFJet40
 #   photon2012_HLT_data_triggerEff_Mu40
 #   photon2012_HLT_data_triggerEff_IsoMu24

@@ -36,6 +36,9 @@ selectionPlotMaker = cms.EDAnalyzer('WrappedSelectionAnalyzer',
 	applyEWKFakeRatePar1       = cms.double(0.016),
 	applyEWKFakeRateParErr1    = cms.double(0.01),
 
+        ###Test
+        srcRho  = cms.InputTag("kt6PFJets", "rho"),
+
 	selection   = cms.PSet(
 
 		photonSrc    = cms.InputTag('selectedPatPhotons'),
@@ -69,20 +72,24 @@ selectionPlotMaker = cms.EDAnalyzer('WrappedSelectionAnalyzer',
 		Mj12  = cms.double(0),
 		Mj23  = cms.double(0),
 		Mj13  = cms.double(0),
-		HT    = cms.double(200),
-		HTJ   = cms.double(250),
+		HT    = cms.double(0),
+		HTJ   = cms.double(0),
 		HTHLT = cms.double(500),
 		#HTHLT = cms.double(450),
 
 		####Trigger Cut!
-		MHT       = cms.double(60),
-		MHTJ      = cms.double(50),
-		MT        = cms.double(0),
-		jetPt     = cms.double(30),
-		jet2Pt    = cms.double(30),
-		jetEta    = cms.double(2.5),
-		photonPt  = cms.double(80),
-		photonEta = cms.double(1.4442),
+		MHT          = cms.double(60),
+		MHTJ         = cms.double(50),
+		MT           = cms.double(0),
+		jetPt        = cms.double(30),
+		jet2Pt       = cms.double(30),
+		jetEta       = cms.double(2.5),
+		photonPt     = cms.double(80),
+		photonEta    = cms.double(1.4442),
+		photonPtCor  = cms.double(110),
+                photon2Pt    = cms.double(0),
+
+		photonJetMatch = cms.double(0),
 
 		useGenForSelection     = cms.bool(False),
 		requireGenForSelection = cms.bool(False),
