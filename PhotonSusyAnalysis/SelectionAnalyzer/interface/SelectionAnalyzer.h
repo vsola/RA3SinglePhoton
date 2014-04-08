@@ -8,9 +8,11 @@
 #include <memory>
 
 // root
+#include "TROOT.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TCanvas.h"
+#include "TString.h"
 
 // cmssw
 #include "PhysicsTools/UtilAlgos/interface/BasicAnalyzer.h"
@@ -101,6 +103,10 @@ class SelectionAnalyzer: public edm::BasicAnalyzer {
     pat::strbitset pjSelectorReturns_;
     double evtCounter_, evtCounter100_, evtCounter200_, evtCounter350_, evtCounterPresel_, evtCounterWeighted_, evtCounterWeightedError_, evtCounterPreselWeighted_, evtCounterPreselWeightedError_;
     TFileDirectory *  fs_;
+
+    // test
+    edm::InputTag srcRho_;
+
 };
 
 

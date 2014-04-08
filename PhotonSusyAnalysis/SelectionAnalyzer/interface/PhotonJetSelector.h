@@ -1,13 +1,19 @@
 #ifndef PHOTONJETSELECTOR_H_
 #define PHOTONJETSELECTOR_H_
 
+#include "TROOT.h"
+
+#include "DataFormats/PatCandidates/interface/PATObject.h"
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/PatCandidates/interface/Photon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
+
 #include "PhysicsTools/SelectorUtils/interface/EventSelector.h"
 #include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "DataFormats/METReco/interface/MET.h"
+
 #include "PhysicsTools/UtilAlgos/interface/EDFilterWrapper.h"
 
 #include "PhysicsTools/SelectorUtils/interface/JetIDSelectionFunctor.h"
@@ -18,11 +24,6 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 #include "SimDataFormats/GeneratorProducts/interface/LHEEventProduct.h"
-
-//#include "Util/OwnUtil/src/HistoDrawUtil.h"
-//#include "Util/OwnUtil/src/PhysicsUtil.h"
-
-#include "DataFormats/METReco/interface/MET.h"
 
 #include <TF1.h>
 #include <TH2F.h>
@@ -280,6 +281,7 @@ class PhotonJetSelector: public EventSelector {
 
 
 	  std::vector<pat::Photon> getCleanPhotons(edm::Handle<std::vector<pat::Photon> > photons);
+	  std::vector<pat::Photon> getCleanPhotonsHLT(edm::Handle<std::vector<pat::Photon> > photons);
 
 
 	  //DEFINE OBJECT COLLECTIONS
@@ -390,6 +392,10 @@ class PhotonJetSelector: public EventSelector {
 	  index_type jet2Pt_;
 	  index_type jetEta_;
 	  index_type photonPt_;
+	  index_type photonPtCor_;
+	  index_type photon2Pt_;
+	  index_type photonJetMatch_;
+	  index_type photonTightMatch_;
 	  index_type photonGenPdgId_;
 	  index_type photonGenPdgIdMother_;
 	  index_type photonEta_;

@@ -66,6 +66,7 @@ SelectionAnalyzer :: SelectionAnalyzer(const edm::ParameterSet& cfg, TFileDirect
 
     }
 
+    /*
     if (cfg.exists("cutsForN1")) {
         cutsN1_ = cfg.getParameter<std::vector<std::string> > ("cutsForN1");
         for (int cutIt = 0; cutIt < (int) (cutsN1_.size()); ++cutIt) {
@@ -75,6 +76,7 @@ SelectionAnalyzer :: SelectionAnalyzer(const edm::ParameterSet& cfg, TFileDirect
             initializeHistos(fs, "N_1_" + cut + "_");
         }
     }
+    */
 
     std::string fileName("PhotonSusyAnalysis/SelectionAnalyzer/data/" + applyFakeRateCorrectionHistoName_ + ".root");
      if ( loggingVerbosity_ > 1 ) {
@@ -132,7 +134,7 @@ SelectionAnalyzer :: SelectionAnalyzer(const edm::ParameterSet& cfg, TFileDirect
       std::cout << "constructor done:" << c << std::endl;
 
     // test
-    srcRho_ = cfg.getParameter<edm::InputTag> ("srcRho");
+    // srcRho_ = cfg.getParameter<edm::InputTag> ("srcRho");
 
 
     f->Close();
@@ -269,6 +271,7 @@ void SelectionAnalyzer :: analyze(const edm::EventBase& event) {
 
     //std::cout<<"==========passSelection  "<<passSelection<<std::endl;
 
+    /*
     //fill N-1 plots
     for (int cutIt = 0; cutIt < (int) (cutsN1_.size()); ++cutIt) {
         std::string cut = cutsN1_.at(cutIt);
@@ -283,6 +286,7 @@ void SelectionAnalyzer :: analyze(const edm::EventBase& event) {
             fillHistos(event, weight, weightNoPU, pjSelectorN1_, "N_1_" + cut + "_");
 
     }//for cutsN1
+    */
 
 
     if (passesAllCutsExceptPresel) {
@@ -382,7 +386,7 @@ cout << "VS!!!"
         }//end b-tag checks
         */
 	
-	/*	
+	/*
         // Cross-check with Knut
         if ( pjSelector_.isPhotonValid() && 
 	     pjSelector_.isJetValid()    && 
@@ -395,8 +399,8 @@ cout << "VS!!!"
 	    const pat::Photon & photon = pjSelector_.photon();
 
 
-	    edm::Handle<double> rhoH;
-	    event.getByLabel(srcRho_, rhoH);
+//	    edm::Handle<double> rhoH;
+//	    event.getByLabel(srcRho_, rhoH);
 
 //	      # runNumber : luminosityBlockNumber : eventNumber
 //	      # met =
@@ -412,7 +416,7 @@ cout << "VS!!!"
 		      << " # "                          << event.eventAuxiliary().run()
 		      << " : "                          << event.eventAuxiliary().luminosityBlock()
 		      << " : "                          << event.eventAuxiliary().event()
-		      << " # rho = "                    << *rhoH
+//		      << " # rho = "                    << *rhoH
 		      << " # met = "                    << met.pt()
 		      << " # ht = "                     << pjSelector_.htHLT()
 		      << " # weight = "                 << weight
@@ -425,19 +429,19 @@ cout << "VS!!!"
 		      << " # 1.jetPt = "                << pjSelector_.jet().pt()
 		      << " # 1.jetEta = "               << pjSelector_.jet().eta()
 		      << " # 1.jetArea = "              << pjSelector_.jet().jetArea()
-		      << " # 1.jet Uncorr = "           << pjSelector_.jet().correctedJet("Uncorrected")
-		      << " # 1.jet L1Fast = "           << pjSelector_.jet().correctedJet("L1FastJet") //knut
-		      << " # 1.jet L2Rel = "            << pjSelector_.jet().correctedJet("L2Relative")
-		      << " # 1.jet L3Abs = "            << pjSelector_.jet().correctedJet("L3Absolute")
-		      << " # 1.jet L2L3Res = "          << pjSelector_.jet().correctedJet("L2L3Residual")
+	      //<< " # 1.jet Uncorr = "           << pjSelector_.jet().correctedJet("Uncorrected")
+	      //<< " # 1.jet L1Fast = "           << pjSelector_.jet().correctedJet("L1FastJet") //knut
+	      //<< " # 1.jet L2Rel = "            << pjSelector_.jet().correctedJet("L2Relative")
+	      //<< " # 1.jet L3Abs = "            << pjSelector_.jet().correctedJet("L3Absolute")
+	      //<< " # 1.jet L2L3Res = "          << pjSelector_.jet().correctedJet("L2L3Residual")
 		      << " # 2.jetPt = "                << pjSelector_.jet2().pt()
 		      << " # 2.jetEta = "               << pjSelector_.jet2().eta()
 		      << " # 2.jetArea = "              << pjSelector_.jet2().jetArea()
-		      << " # 2.jet Uncorr = "           << pjSelector_.jet2().correctedJet("Uncorrected")
-		      << " # 2.jet L1Fast = "           << pjSelector_.jet2().correctedJet("L1FastJet") //knut
-		      << " # 2.jet L2Rel = "            << pjSelector_.jet2().correctedJet("L2Relative")
-		      << " # 2.jet L3Abs = "            << pjSelector_.jet2().correctedJet("L3Absolute")
-		      << " # 2.jet L2L3Res = "          << pjSelector_.jet2().correctedJet("L2L3Residual")
+	      //<< " # 2.jet Uncorr = "           << pjSelector_.jet2().correctedJet("Uncorrected")
+	      //<< " # 2.jet L1Fast = "           << pjSelector_.jet2().correctedJet("L1FastJet") //knut
+	      //<< " # 2.jet L2Rel = "            << pjSelector_.jet2().correctedJet("L2Relative")
+	      //<< " # 2.jet L3Abs = "            << pjSelector_.jet2().correctedJet("L3Absolute")
+	      //<< " # 2.jet L2L3Res = "          << pjSelector_.jet2().correctedJet("L2L3Residual")
 		      << std::endl
 		      << std::endl;
 	    //}
