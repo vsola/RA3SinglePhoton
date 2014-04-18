@@ -418,10 +418,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	###### ANALYSIS SELECTION ###########################################################
 	process.myjetselection  = process.selectedPatJets.clone(
 		src = 'selectedPatJetsPFlow',
-		cut = 'pt>30'
+		cut = 'pt()>30'
 		)
 
-	# photonKinematicCuts = 'pt>80 && isEB()' 
+	# photonKinematicCuts = 'pt()>80 && isEB()' 
 	
 	# Define photon id (tight, fake, electron, etc.)
  	# With rho&03Cone
@@ -430,18 +430,18 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	# https://twiki.cern.ch/twiki/bin/view/CMS/CutBasedPhotonID2012
 	
 	# Photon
-	cutForPhotonIdTight = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<2.6 && userFloat("neutralIsoCor")<(3.5+0.04*pt) && userFloat("photonIsoCor")<(1.3+0.005*pt)'
+	cutForPhotonIdTight = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<2.6 && userFloat("neutralIsoCor")<(3.5+0.04*pt()) && userFloat("photonIsoCor")<(1.3+0.005*pt())'
 
 	# Photon_ele
-	cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<2.6 && userFloat("neutralIsoCor")<(3.5+0.04*pt) && userFloat("photonIsoCor")<(1.3+0.005*pt)'
+	cutForPhotonIdTightNoPixelSeedVeto = 'hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<2.6 && userFloat("neutralIsoCor")<(3.5+0.04*pt()) && userFloat("photonIsoCor")<(1.3+0.005*pt())'
 	
 	# Photon_jet
-	cutForFODenominator = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")>0.26 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")>(0.35+0.004*pt) && userFloat("neutralIsoCor")<(35.0+0.4*pt) && userFloat("photonIsoCor")>(0.13+0.0005*pt) && userFloat("photonIsoCor")<(13.0+0.05*pt) && ( userFloat("chargedIsoCor")>2.6) || userFloat("neutralIsoCor")>(3.5+0.04*pt) || userFloat("photonIsoCor")>(1.3+0.005*pt)'
+	cutForFODenominator = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")>0.26 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")>(0.35+0.004*pt()) && userFloat("neutralIsoCor")<(35.0+0.4*pt()) && userFloat("photonIsoCor")>(0.13+0.0005*pt()) && userFloat("photonIsoCor")<(13.0+0.05*pt()) && ( userFloat("chargedIsoCor")>2.6) || userFloat("neutralIsoCor")>(3.5+0.04*pt()) || userFloat("photonIsoCor")>(1.3+0.005*pt())'
 
 	# Photon_hlt
 	cutForPhotonIdHLT = cutForPhotonIdTight 
 	# cutForPhotonIdHLT = cutForFODenominator+"||"+ cutForPhotonIdTight 
-	# cutForPhotonIdHLT = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")<(35.0+0.4*pt) && userFloat("photonIsoCor")<(13.0+0.05*pt)'
+	# cutForPhotonIdHLT = '!hasPixelSeed() && r9()<1.0 && sigmaIetaIeta()>0.001 && userFloat("sigmaIphiIphi")>0.001 && sigmaIetaIeta()<0.012 && hadTowOverEm()<0.05 && userFloat("chargedIsoCor")<26.0 && userFloat("neutralIsoCor")<(35.0+0.4*pt()) && userFloat("photonIsoCor")<(13.0+0.05*pt())'
 
 
 	# Only used in myphotonselectionLoose
@@ -482,7 +482,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	
 	process.myphotonselectionLoose  = process.selectedPatPhotons.clone(
 		src = 'selectedPhotonsWithRhoAndIsos',
-		cut = 'pt>60 && '+cutForPhotonIdTrigger
+		cut = 'pt()>60 && '+cutForPhotonIdTrigger
 	       )
 
 	process.myphotonselectionHLT  = process.selectedPatPhotons.clone(
@@ -494,12 +494,12 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.cleanPatJetsIsolatedLeptonsPF = process.cleanPatJets.clone() 
 #	process.cleanPatJetsIsolatedLeptonsPF = process.selectedPatJets.clone() #VS!!!
 	process.cleanPatJetsIsolatedLeptonsPF.src           = 'myjetselection'
-	process.cleanPatJetsIsolatedLeptonsPF.preselection  = cms.string('pt>30')
+	process.cleanPatJetsIsolatedLeptonsPF.preselection  = cms.string('pt()>30')
 	process.cleanPatJetsIsolatedLeptonsPF.checkOverlaps = cms.PSet(
 		muons     = cms.PSet(
  		 src       = cms.InputTag("patMuonsPFlow"),
 		 algorithm = cms.string("byDeltaR"),
-		 preselection        = cms.string("abs(eta) < 2.6  && pt >15 && isPFMuon() && (isGlobalMuon() || isTrackerMuon())"),  # don't preselect the muons
+		 preselection        = cms.string("abs(eta()) < 2.6  && pt() >15 && isPFMuon() && (isGlobalMuon() || isTrackerMuon())"),  # don't preselect the muons
 		 deltaR              = cms.double(0.3),
 		 checkRecoComponents = cms.bool(False), # don't check if they share some AOD object ref
 		 pairCut             = cms.string(""),
@@ -509,7 +509,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 		#src       = cms.InputTag("gsfElectrons"),
 		 src       = cms.InputTag("patElectronsPFlow"),
 		 algorithm = cms.string("byDeltaR"),
-		 preselection        = cms.string("( pt>15 && abs(eta)<1.479 && (chargedHadronIso()+photonIso()+neutralHadronIso()) / pt()<0.15  && deltaEtaSuperClusterTrackAtVtx()<0.007 && deltaPhiSuperClusterTrackAtVtx()<0.8 && hadronicOverEm()<0.15 && sigmaIetaIeta()<0.01 ) || ( pt>20 && abs(eta)>1.479 && abs(eta)<2.5 && (chargedHadronIso()+photonIso()+neutralHadronIso()) / pt()<0.15  && deltaEtaSuperClusterTrackAtVtx()<0.01 && deltaPhiSuperClusterTrackAtVtx()<0.7 && sigmaIetaIeta()<0.03 )"),  # don't preselect the electrons
+		 preselection        = cms.string("( pt()>15 && abs(eta())<1.479 && ((chargedHadronIso()+photonIso()+neutralHadronIso()) / pt())<0.15  && deltaEtaSuperClusterTrackAtVtx()<0.007 && deltaPhiSuperClusterTrackAtVtx()<0.8 && hadronicOverEm()<0.15 && sigmaIetaIeta()<0.01 ) || ( pt()>20 && abs(eta())>1.479 && abs(eta())<2.5 && ((chargedHadronIso()+photonIso()+neutralHadronIso()) / pt())<0.15  && deltaEtaSuperClusterTrackAtVtx()<0.01 && deltaPhiSuperClusterTrackAtVtx()<0.7 && sigmaIetaIeta()<0.03 )"),  # don't preselect the electrons
 		 deltaR              = cms.double(0.3),
 		 checkRecoComponents = cms.bool(False), # don't check if they share some AOD object ref
 		 pairCut             = cms.string(""),
@@ -632,11 +632,11 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	
 	process.select_1ph_2jets = process.selectionPlotMaker.clone();
 	process.select_1ph_2jets.selection.cutsToUse = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-								   "photonEta","photonPt","jetEta","MET",
+								   "photonEta","jetPt","jetEta","MET",
 								   "photonPtCor")
 	process.select_1ph_2jets.cutsForN1           = cms.vstring("MET","photonEta")
 	process.select_1ph_2jets.cutsForPresel       = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-								   "photonEta","photonPt","jetEta",
+								   "photonEta","jetPt","jetEta",
 								   "photonPtCor")
 	process.select_1ph_2jets.selection.requireGenForSelection = False
 	
@@ -660,10 +660,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	# ==1 Photon, =2jets +++++BKG++++ Fake electron/noPixelSeedVetoPhoton 
 	process.select_1ph_2jets_GenEleVeto                      = process.select_1ph_2jets.clone();
 	process.select_1ph_2jets_GenEleVeto.selection.cutsToUse  = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-									       "photonEta","photonPt","jetEta","MET",
+									       "photonEta","jetPt","jetEta","MET",
 									       "genEleVeto","photonPtCor")
 	process.select_1ph_2jets_GenEleVeto.cutsForPresel        = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-									       "photonEta","photonPt","jetEta",
+									       "photonEta","jetPt","jetEta",
 									       "genEleVeto","photonPtCor")
 	process.select_1ph_2jets_GenEleVeto.selection.genEleVeto = 2 # NO electron gen
 	
@@ -687,7 +687,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_GenEleVetoRe                      = process.select_1ph_2jets_GenEleVeto.clone();
 	process.select_1ph_2jets_GenEleVetoRe.selection.photonSrc  = ('myphotonselection')
 	process.select_1ph_2jets_GenEleVetoRe.selection.cutsToUse  = cms.vstring("genEleVeto",">= 2 Jets",">= 1 Photons",
-										 "HTHLT","photonEta","photonPt","jetEta",
+										 "HTHLT","photonEta","jetPt","jetEta",
 										 "MET","photonPtCor")
 	process.select_1ph_2jets_GenEleVetoRe.selection.genEleVeto = 1 # electron gen
 	
@@ -711,10 +711,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_2jets_FO                            = process.select_1ph_2jets.clone();
 	process.select_1ph_2jets_FO.selection.photonSrc        = ('myphotonselectionFO')
 	process.select_1ph_2jets_FO.selection.cutsToUse        = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-									     "photonEta","photonPt","jetEta","MET",
+									     "photonEta","jetPt","jetEta","MET",
 									     "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_FO.cutsForPresel              = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-									     "photonEta","photonPt","jetEta",
+									     "photonEta","jetPt","jetEta",
 									     "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_FO.selection.photonJetMatch   = 1
 	process.select_1ph_2jets_FO.selection.photonTightMatch = 1
@@ -726,10 +726,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	######################################################
 	process.select_1ph_2jets_FO_Corr                                    = process.select_1ph_2jets.clone();
 	process.select_1ph_2jets_FO_Corr.selection.cutsToUse                = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-											  "photonEta","photonPt","jetEta","MET",
+											  "photonEta","jetPt","jetEta","MET",
 											  "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_FO_Corr.cutsForPresel                     = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-											 "photonEta","photonPt","jetEta",
+											 "photonEta","jetPt","jetEta",
 											 "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_FO_Corr.selection.isPhotonFO               = True
 	process.select_1ph_2jets_FO_Corr.selection.photonSrc                = ('myphotonselectionFO')
@@ -755,11 +755,11 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	################################################################################################
 	process.select_1ph_3jets                      = process.selectionPlotMaker.clone();
 	process.select_1ph_3jets.selection.cutsToUse  = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-								   "photonEta","photonPt","jetEta","MET",
+								   "photonEta","jetPt","jetEta","MET",
 								    "photonPtCor")
 	process.select_1ph_3jets.cutsForN1            = cms.vstring("MET")
 	process.select_1ph_3jets.cutsForPresel        = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-								   "photonEta","photonPt","jetEta",
+								   "photonEta","jetPt","jetEta",
 								    "photonPtCor")
 	process.select_1ph_3jets.selection.requireGenForSelection = False
 	process.select_1ph_3jets.selection.genEleVeto = 0 # NO cut applied
@@ -783,10 +783,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	# ==1 Photon, >=3jets +++++BKG++++ Fake electron/noPixelSeedVetoPhoton 
 	process.select_1ph_3jets_GenEleVeto                      = process.select_1ph_3jets.clone();
 	process.select_1ph_3jets_GenEleVeto.selection.cutsToUse  = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-									       "photonEta","photonPt","jetEta","MET",
+									       "photonEta","jetPt","jetEta","MET",
 									       "genEleVeto","photonPtCor")
 	process.select_1ph_3jets_GenEleVeto.cutsForPresel        = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-									       "photonEta","photonPt","jetEta",
+									       "photonEta","jetPt","jetEta",
 									       "genEleVeto","photonPtCor")
 	process.select_1ph_3jets_GenEleVeto.selection.genEleVeto = 2 # NO electron gen
 	
@@ -810,7 +810,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoRe                                  = process.select_1ph_3jets_GenEleVeto.clone();
 	process.select_1ph_3jets_GenEleVetoRe.selection.photonSrc              = ('myphotonselection')
 	process.select_1ph_3jets_GenEleVetoRe.selection.cutsToUse              = cms.vstring("genEleVeto",">= 3 Jets",">= 1 Photons","HTHLT",
-											     "photonEta","photonPt","jetEta","MET",
+											     "photonEta","jetPt","jetEta","MET",
 											     "photonPtCor")
 	process.select_1ph_3jets_GenEleVetoRe.selection.genEleVeto             = 1  # electron gen
 	process.select_1ph_3jets_GenEleVetoRe.selection.requireGenForSelection = False
@@ -827,7 +827,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoReMatchEle                                  = process.select_1ph_3jets_GenEleVeto.clone();
 	process.select_1ph_3jets_GenEleVetoReMatchEle.selection.photonSrc              = ('myphotonselection')
 	process.select_1ph_3jets_GenEleVetoReMatchEle.selection.cutsToUse              = cms.vstring("genEleVeto",">= 3 Jets",">= 1 Photons","HTHLT",
-												     "photonEta","photonPt","jetEta","MET",
+												     "photonEta","jetPt","jetEta","MET",
 												     "photonPtCor")
 	process.select_1ph_3jets_GenEleVetoReMatchEle.selection.genEleVeto             = 1
 	process.select_1ph_3jets_GenEleVetoReMatchEle.selection.requireGenForSelection = True # !!!
@@ -844,7 +844,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoReMatchJet                                  = process.select_1ph_3jets_GenEleVeto.clone();
 	process.select_1ph_3jets_GenEleVetoReMatchJet.selection.photonSrc              = ('myphotonselection')
 	process.select_1ph_3jets_GenEleVetoReMatchJet.selection.cutsToUse              = cms.vstring("genEleVeto",">= 3 Jets",">= 1 Photons","HTHLT",
-												     "photonEta","photonPt","jetEta","MET",
+												     "photonEta","jetPt","jetEta","MET",
 												     "photonPtCor")
 	process.select_1ph_3jets_GenEleVetoReMatchJet.selection.genEleVeto             = 1
 	process.select_1ph_3jets_GenEleVetoReMatchJet.selection.requireGenForSelection = True # !!!
@@ -861,7 +861,7 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_GenEleVetoReMatchNoJet                                  = process.select_1ph_3jets_GenEleVeto.clone();
 	process.select_1ph_3jets_GenEleVetoReMatchNoJet.selection.photonSrc              = ('myphotonselection')
 	process.select_1ph_3jets_GenEleVetoReMatchNoJet.selection.cutsToUse              = cms.vstring("genEleVeto",">= 3 Jets",">= 1 Photons","HTHLT",
-												       "photonEta","photonPt","jetEta","MET",
+												       "photonEta","jetPt","jetEta","MET",
 												       "photonPtCor")
 	process.select_1ph_3jets_GenEleVetoReMatchNoJet.selection.genEleVeto             = 1
 	process.select_1ph_3jets_GenEleVetoReMatchNoJet.selection.requireGenForSelection = True # !!!
@@ -889,10 +889,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	process.select_1ph_3jets_FO                            = process.select_1ph_3jets.clone();
 	process.select_1ph_3jets_FO.selection.photonSrc        = ('myphotonselectionFO')
 	process.select_1ph_3jets_FO.selection.cutsToUse        = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-									     "photonEta","photonPt","jetEta","MET",
+									     "photonEta","jetPt","jetEta","MET",
 									     "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_3jets_FO.cutsForPresel              = cms.vstring(">= 3 Jets",">= 1 Photons","HTHLT",
-									     "photonEta","photonPt","jetEta",
+									     "photonEta","jetPt","jetEta",
 									     "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_3jets_FO.selection.photonJetMatch   = 1
 	process.select_1ph_3jets_FO.selection.photonTightMatch = 1
@@ -925,11 +925,11 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	################################################################################################
 	process.select_1ph_2jets_1b                     = process.selectionPlotMaker.clone();
 	process.select_1ph_2jets_1b.selection.cutsToUse = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-								      "photonEta","photonPt","jetEta","MET",
+								      "photonEta","jetPt","jetEta","MET",
 								      ">= 1 bJets","photonPtCor")
 	process.select_1ph_2jets_1b.cutsForN1           = cms.vstring("MET","photonEta")
 	process.select_1ph_2jets_1b.cutsForPresel       = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",
-								      "photonEta","photonPt","jetEta",
+								      "photonEta","jetPt","jetEta",
 								      ">= 1 bJets","photonPtCor")
 	process.select_1ph_2jets_1b.selection.requireGenForSelection = False
 	
@@ -951,10 +951,10 @@ def getProcessFor(sampleConf,process,test,doSkimming,doAnalysis,fileAppendix,noK
 	# ==1 Photon, =2jets +++++BKG++++ FO Corr+++ Estimate after application of FakeRate
 	process.select_1ph_2jets_1b_FO_Corr                                    = process.select_1ph_2jets_1b.clone();
 	process.select_1ph_2jets_1b_FO_Corr.selection.cutsToUse                     = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",">= 1 bJets",
-												  "photonEta","photonPt","jetEta","MET",
+												  "photonEta","jetPt","jetEta","MET",
 												  "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_1b_FO_Corr.cutsForPresel                           = cms.vstring(">= 2 Jets",">= 1 Photons","HTHLT",">= 1 bJets",
-												  "photonEta","photonPt","jetEta",
+												  "photonEta","jetPt","jetEta",
 												  "photonPtCor","photonJetMatch","photonTightMatch")
 	process.select_1ph_2jets_1b_FO_Corr.selection.isPhotonFO               = True
 	process.select_1ph_2jets_1b_FO_Corr.selection.photonJetMatch           = 1

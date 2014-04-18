@@ -576,16 +576,16 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         hists_[(prefix + "photonPtLowMet2").c_str()] = fs.make<TH1F> ((prefix + "photonPtLowMet2").c_str(), "pt", 150, 5., 1505.);
         hists_[(prefix + "photonPtLowMet2").c_str()]->Sumw2();
 
-        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 230, 200., 2500.);
         hists2D_[(prefix + "photonPtVsHthltLowMet").c_str()]->Sumw2();
 
-        hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet1").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet1").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 230, 200., 2500.);
         hists2D_[(prefix + "photonPtVsHthltLowMet1").c_str()]->Sumw2();
 
-        hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2").c_str(), "photonPtVsHthltLowMet", 150, 5., 1505., 230, 200., 2500.);
         hists2D_[(prefix + "photonPtVsHthltLowMet2").c_str()]->Sumw2();
 
-        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2j").c_str(), "photonPtVsHthltLowMet2j", 150, 5., 1505., 250, 50., 2500.);
+        hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHthltLowMet2j").c_str(), "photonPtVsHthltLowMet2j", 150, 5., 1505., 230, 200., 2500.);
         hists2D_[(prefix + "photonPtVsHthltLowMet2j").c_str()]->Sumw2();
 
         hists2D_[(prefix + "photonPtVsHtjLowMet").c_str()] = fs.make<TH2F> ((prefix + "photonPtVsHtjLowMet").c_str(), "photonPtVsHtjLowMet", 150, 5., 1505., 250, 0., 2500.);
@@ -722,7 +722,7 @@ void SelectionAnalyzer :: initializeHistos(TFileDirectory& fs, std::string prefi
         ///initialize histos for additional cut variables
         hists_[(prefix + "ht").c_str()] = fs.make<TH1F> ((prefix + "ht").c_str(), "ht", 250, 50., 2500.);
         hists_[(prefix + "ht").c_str()]->Sumw2();
-        hists_[(prefix + "hthlt").c_str()] = fs.make<TH1F> ((prefix + "hthlt").c_str(), "hthlt", 250, 50., 2500.);
+        hists_[(prefix + "hthlt").c_str()] = fs.make<TH1F> ((prefix + "hthlt").c_str(), "hthlt", 230, 200., 2500.);
         hists_[(prefix + "hthlt").c_str()]->Sumw2();
 
         hists_[(prefix + "htj").c_str()] = fs.make<TH1F> ((prefix + "htj").c_str(), "htj", 150, -0., 1500.);
